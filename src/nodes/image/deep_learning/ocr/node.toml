@@ -1,0 +1,45 @@
+name = "image.deep_learning.ocr"
+version = "1.0.0"
+display_name = "OCR"
+description = "Optical Character Recognition using PaddleOCR v5"
+order = 60
+gui = ["reactflow", "headless"]
+measure_time = true
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[ports]]
+name = "result_json"
+data_type = "string"
+direction = "out"
+preview = false
+
+[[ports]]
+name = "text_list"
+data_type = "string"
+direction = "out"
+preview = false
+
+[[properties]]
+name = "model"
+display_name = "Model"
+type = "int"
+default = 0
+widget = "dropdown"
+disabled_while_streaming = true
+options = [
+    { value = 0, label = "PaddleOCRv5(Mobile)" },
+    { value = 1, label = "PaddleOCRv5(Server)" },
+]
+
+[[properties]]
+name = "use_gpu"
+display_name = "Use GPU"
+type = "bool"
+default = true
+widget = "checkbox"
+disabled_while_streaming = true
+requires_gpu = true

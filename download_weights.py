@@ -3,12 +3,14 @@
 モデルウェイトファイルをGitHub Releasesからダウンロードして配置するスクリプト。
 
 使用方法:
-    python download_weights.py
+    python download_weights.py          # 既存ファイルはスキップ
+    python download_weights.py --force  # 全ファイルを強制的に上書き
 
 出力:
     各モデルファイルが元の格納場所に配置される
 """
 
+import argparse
 import sys
 import urllib.request
 import urllib.error
@@ -76,6 +78,10 @@ MODEL_FILES = [
     ("v0.0.0", "pose_landmarker_full_float16.task", "src/nodes/image/deep_learning/pose_estimation/MediaPipe/model/pose_landmarker_full_float16.task"),
     ("v0.0.0", "pose_landmarker_heavy_float16.task", "src/nodes/image/deep_learning/pose_estimation/MediaPipe/model/pose_landmarker_heavy_float16.task"),
     ("v0.0.0", "gesture_recognizer_float16.task", "src/nodes/image/deep_learning/hand_pose_estimation/MediaPipe/model/gesture_recognizer_float16.task"),
+    ("v0.0.0", "PP-OCRv5_mobile_det_infer.onnx", "src/nodes/image/deep_learning/ocr/PaddleOCRv5/model/PP-OCRv5_mobile_det_infer.onnx"),
+    ("v0.0.0", "PP-OCRv5_mobile_rec_infer.onnx", "src/nodes/image/deep_learning/ocr/PaddleOCRv5/model/PP-OCRv5_mobile_rec_infer.onnx"),
+    ("v0.0.0", "PP-OCRv5_server_det_infer.onnx", "src/nodes/image/deep_learning/ocr/PaddleOCRv5/model/PP-OCRv5_server_det_infer.onnx"),
+    ("v0.0.0", "PP-OCRv5_server_rec_infer.onnx", "src/nodes/image/deep_learning/ocr/PaddleOCRv5/model/PP-OCRv5_server_rec_infer.onnx"),
 ]
 
 
@@ -108,12 +114,30 @@ def download_file(url: str, dest_path: Path) -> tuple[bool, str]:
         return False, str(e)
 
 
+def parse_arguments() -> argparse.Namespace:
+    """コマンドライン引数をパース"""
+    parser = argparse.ArgumentParser(
+        description="モデルウェイトファイルをGitHub Releasesからダウンロード"
+    )
+    parser.add_argument(
+        "--force", "-f",
+        action="store_true",
+        help="既存ファイルを強制的に上書きする"
+    )
+    return parser.parse_args()
+
+
 def main():
+    # コマンドライン引数をパース
+    args = parse_arguments()
+    force_overwrite = args.force
+
     # プロジェクトルートを取得（このスクリプトの親ディレクトリ）
     project_root = Path(__file__).resolve().parent
 
     total_files = len(MODEL_FILES)
     success_count = 0
+    skipped_count = 0
     failed_files = []
 
     print("=" * 60)
@@ -122,12 +146,20 @@ def main():
     print(f"Source: {GITHUB_RELEASE_BASE}")
     print(f"Target: {project_root}")
     print(f"Total files: {total_files}")
+    print(f"Force overwrite: {force_overwrite}")
     print("=" * 60)
     print()
 
     for i, (version, filename, dest_rel_path) in enumerate(MODEL_FILES, 1):
         url = f"{GITHUB_RELEASE_BASE}/{version}/{filename}"
         dest_path = project_root / dest_rel_path
+
+        # 既存ファイルのスキップ判定
+        if dest_path.exists() and not force_overwrite:
+            skipped_count += 1
+            file_size = dest_path.stat().st_size
+            print(f"({i}/{total_files}) SKIP: {filename} ({format_size(file_size)}) - already exists")
+            continue
 
         # ダウンロード
         success, error_msg = download_file(url, dest_path)
@@ -145,8 +177,9 @@ def main():
     print("=" * 60)
     print("Summary")
     print("=" * 60)
-    print(f"  Success: {success_count}/{total_files}")
-    print(f"  Failed:  {len(failed_files)}/{total_files}")
+    print(f"  Downloaded: {success_count}/{total_files}")
+    print(f"  Skipped:    {skipped_count}/{total_files}")
+    print(f"  Failed:     {len(failed_files)}/{total_files}")
 
     if failed_files:
         print()
@@ -157,8 +190,9 @@ def main():
             print(f"    Error: {error_msg}")
 
     print()
-    if success_count == total_files:
-        print("All downloads completed successfully!")
+    completed_count = success_count + skipped_count
+    if completed_count == total_files:
+        print("All files are ready!")
         return 0
     else:
         print("Some downloads failed. Please check the errors above.")

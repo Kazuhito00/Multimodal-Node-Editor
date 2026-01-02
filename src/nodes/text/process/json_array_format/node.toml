@@ -1,0 +1,39 @@
+name = "text.process.json_array_format"
+version = "1.0.0"
+display_name = "JSON Array Format"
+description = "Extract fields from JSON array and format as text"
+order = 41
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "json"
+data_type = "string"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "text"
+data_type = "string"
+direction = "out"
+preview = false
+
+[[properties]]
+name = "format"
+display_name = "Format"
+type = "string"
+default = "{id}: {text}"
+widget = "text_input"
+
+[[properties]]
+name = "separator"
+display_name = "Separator"
+type = "string"
+default = "\n"
+widget = "text_input"
+
+[[properties]]
+name = "array_key"
+display_name = "Array Key"
+type = "string"
+default = ""
+widget = "text_input"
