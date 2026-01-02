@@ -97,21 +97,51 @@ def format_size(size_bytes: int) -> str:
         return f"{size_bytes / (1024 * 1024 * 1024):.2f} GB"
 
 
-def download_file(url: str, dest_path: Path) -> tuple[bool, str]:
-    """ファイルをダウンロード"""
+def download_file_with_progress(
+    url: str,
+    dest_path: Path,
+    prefix: str = ""
+) -> tuple[bool, str, int]:
+    """ファイルをダウンロード（進捗表示付き）"""
     try:
         # 親ディレクトリを作成
         dest_path.parent.mkdir(parents=True, exist_ok=True)
 
-        # ダウンロード
-        urllib.request.urlretrieve(url, dest_path)
-        return True, ""
+        # URLを開いてファイルサイズを取得
+        response = urllib.request.urlopen(url)
+        total_size = int(response.headers.get('Content-Length', 0))
+
+        # チャンクサイズ
+        chunk_size = 8192
+        downloaded = 0
+
+        with open(dest_path, 'wb') as f:
+            while True:
+                chunk = response.read(chunk_size)
+                if not chunk:
+                    break
+                f.write(chunk)
+                downloaded += len(chunk)
+
+                # 進捗表示（行末をスペースで埋めて前の文字を消す）
+                if total_size > 0:
+                    # 単位は最後だけ表示（19.5/38.8 MB）
+                    dl_mb = downloaded / (1024 * 1024)
+                    total_mb = total_size / (1024 * 1024)
+                    progress_str = f"{dl_mb:.1f}/{total_mb:.1f} MB"
+                else:
+                    progress_str = format_size(downloaded)
+                line = f"\r{prefix} {progress_str}"
+                print(f"{line:<80}", end="", flush=True)
+
+        return True, "", total_size
+
     except urllib.error.HTTPError as e:
-        return False, f"HTTP Error {e.code}: {e.reason}"
+        return False, f"HTTP Error {e.code}: {e.reason}", 0
     except urllib.error.URLError as e:
-        return False, f"URL Error: {e.reason}"
+        return False, f"URL Error: {e.reason}", 0
     except Exception as e:
-        return False, str(e)
+        return False, str(e), 0
 
 
 def parse_arguments() -> argparse.Namespace:
@@ -161,16 +191,19 @@ def main():
             print(f"({i}/{total_files}) SKIP: {filename} ({format_size(file_size)}) - already exists")
             continue
 
-        # ダウンロード
-        success, error_msg = download_file(url, dest_path)
+        # ダウンロード（進捗表示付き）
+        prefix = f"({i}/{total_files}) {filename}"
+        success, error_msg, file_size = download_file_with_progress(url, dest_path, prefix)
 
         if success:
             success_count += 1
-            file_size = dest_path.stat().st_size
-            print(f"({i}/{total_files}) OK: {filename} ({format_size(file_size)})")
+            # 完了行を出力（進捗表示を上書き）
+            line = f"\r({i}/{total_files}) OK: {filename} ({format_size(file_size)})"
+            print(f"{line:<80}")
         else:
             failed_files.append((filename, dest_rel_path, error_msg))
-            print(f"({i}/{total_files}) NG: {filename} - {error_msg}")
+            line = f"\r({i}/{total_files}) NG: {filename} - {error_msg}"
+            print(f"{line:<80}")
 
     # 結果サマリー
     print()
