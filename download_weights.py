@@ -91,14 +91,6 @@ def format_size(size_bytes: int) -> str:
         return f"{size_bytes / (1024 * 1024 * 1024):.2f} GB"
 
 
-def create_progress_bar(current: int, total: int, width: int = 40) -> str:
-    """プログレスバーを生成"""
-    percentage = current / total if total > 0 else 0
-    filled = int(width * percentage)
-    bar = "█" * filled + "░" * (width - filled)
-    return f"[{bar}] {percentage * 100:5.1f}%"
-
-
 def download_file(url: str, dest_path: Path) -> tuple[bool, str]:
     """ファイルをダウンロード"""
     try:
@@ -137,21 +129,16 @@ def main():
         url = f"{GITHUB_RELEASE_BASE}/{version}/{filename}"
         dest_path = project_root / dest_rel_path
 
-        # 進捗表示
-        progress = create_progress_bar(i, total_files)
-        print(f"\r{progress} ({i}/{total_files})", end="")
-        sys.stdout.flush()
-
         # ダウンロード
         success, error_msg = download_file(url, dest_path)
 
         if success:
             success_count += 1
             file_size = dest_path.stat().st_size
-            print(f"\r{progress} ({i}/{total_files}) ✓ {filename} ({format_size(file_size)})")
+            print(f"({i}/{total_files}) OK: {filename} ({format_size(file_size)})")
         else:
             failed_files.append((filename, dest_rel_path, error_msg))
-            print(f"\r{progress} ({i}/{total_files}) ✗ {filename} - {error_msg}")
+            print(f"({i}/{total_files}) NG: {filename} - {error_msg}")
 
     # 結果サマリー
     print()
