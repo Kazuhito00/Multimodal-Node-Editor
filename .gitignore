@@ -215,11 +215,13 @@ node_modules/
 # temp
 temp/*
 
+# config.json
+config.json
+
 # _model
 _model/*
-
-src/nodes/image/deep_learning/monocular_depth_estimation/Depth-Anything-V2/model/depth_anything_v2_vitb.onnx
-src/nodes/image/deep_learning/monocular_depth_estimation/Depth-Anything-V2/model/depth_anything_v2_vitl.onnx
-src/nodes/image/deep_learning/pose_estimation/ViTPose/model/vitpose_base.onnx
-src/nodes/image/deep_learning/pose_estimation/ViTPose/model/vitpose_large.onnx
-src/nodes/image/deep_learning/pose_estimation/ViTPose/model/vitpose_small.onnx
+*.onnx
+*.tflite
+*.task
+*.pth
+*.pt
