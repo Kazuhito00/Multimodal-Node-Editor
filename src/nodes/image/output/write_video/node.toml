@@ -1,0 +1,12 @@
+name = "image.output.write_video"
+version = "1.0.0"
+display_name = "Write Video"
+description = "Records input images as a video file using OpenCV VideoWriter"
+order = 20
+gui = ["reactflow", "headless"]
+run_when_stopped = true
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "in"

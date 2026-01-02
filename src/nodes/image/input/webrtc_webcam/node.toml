@@ -1,0 +1,20 @@
+name = "image.input.webrtc_webcam"
+version = "1.0.0"
+display_name = "Webcam (WebRTC)"
+description = "Captures video frames from the browser via WebRTC for low-latency streaming."
+order = 31
+gui = ["reactflow"]
+run_when_stopped = true
+no_duplicate = true
+
+[[ports]]
+name = "image_out"
+data_type = "image"
+direction = "out"
+
+[[properties]]
+name = "webrtc_webcam"
+display_name = ""
+type = "string"
+default = ""
+widget = "webrtc_webcam"

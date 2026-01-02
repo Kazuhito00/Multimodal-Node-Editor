@@ -1,0 +1,35 @@
+name = "audio.input.tone_generator"
+version = "1.0.0"
+display_name = "Tone Generator"
+description = "Generate various waveforms at specified frequency"
+order = 24
+gui = ["reactflow", "headless"]
+node_disable = true
+
+[[ports]]
+name = "audio_out"
+data_type = "audio"
+direction = "out"
+
+[[properties]]
+name = "frequency"
+display_name = "Frequency"
+type = "int"
+default = 440
+min = 20
+max = 20000
+step = 100
+widget = "number_input"
+
+[[properties]]
+name = "waveform"
+display_name = "Waveform"
+type = "string"
+default = "sine"
+widget = "dropdown"
+options = [
+    { value = "sine", label = "Sine" },
+    { value = "square", label = "Square" },
+    { value = "triangle", label = "Triangle" },
+    { value = "sawtooth", label = "Sawtooth" }
+]

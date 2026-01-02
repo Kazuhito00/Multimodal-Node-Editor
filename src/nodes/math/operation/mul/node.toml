@@ -1,0 +1,23 @@
+name = "math.operation.mul"
+version = "1.0.0"
+display_name = "Mul"
+description = "Multiply two numbers (a * b)"
+order = 30
+gui = ["reactflow", "headless"]
+measure_time = false
+run_when_stopped = true  # STOP時も実行可能
+
+[[ports]]
+name = "a"
+data_type = "float"
+direction = "in"
+
+[[ports]]
+name = "b"
+data_type = "float"
+direction = "in"
+
+[[ports]]
+name = "a*b"
+data_type = "float"
+direction = "out"

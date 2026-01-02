@@ -1,0 +1,26 @@
+name = "text.process.text_replace"
+version = "1.0.0"
+display_name = "Text Replace"
+description = "Replaces text in a string"
+order = 10
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "text"
+data_type = "string"
+direction = "inout"
+preview = false
+
+[[properties]]
+name = "before"
+display_name = "Before"
+type = "string"
+default = ""
+widget = "text_input"
+
+[[properties]]
+name = "after"
+display_name = "After"
+type = "string"
+default = ""
+widget = "text_input"

@@ -1,0 +1,28 @@
+name = "text.output.text_save"
+version = "1.0.0"
+display_name = "Text Save"
+description = "Save text to file and download"
+order = 20
+gui = ["reactflow", "headless"]
+run_when_stopped = true
+
+# テキスト入力
+[[ports]]
+name = "text"
+data_type = "string"
+direction = "in"
+
+# 保存トリガー
+[[ports]]
+name = "save"
+data_type = "trigger"
+direction = "in"
+
+# 保存ボタン
+[[properties]]
+name = "save"
+display_name = ""
+type = "bool"
+default = false
+widget = "button"
+button_label = "Save"

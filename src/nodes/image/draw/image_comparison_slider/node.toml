@@ -1,0 +1,34 @@
+name = "image.draw.image_comparison_slider"
+version = "1.0.0"
+display_name = "Comparison Slider"
+description = "Compare two images with a slider"
+order = 92
+gui = ["reactflow", "headless"]
+run_when_stopped = true
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "out"
+
+[[ports]]
+name = "Image 1"
+data_type = "image"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "Image 2"
+data_type = "image"
+direction = "in"
+preview = false
+
+[[properties]]
+name = "position"
+display_name = ""
+type = "float"
+default = 0.5
+min = 0.0
+max = 1.0
+step = 0.01
+widget = "slider"

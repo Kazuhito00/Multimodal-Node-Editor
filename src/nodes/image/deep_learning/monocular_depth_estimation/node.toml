@@ -1,0 +1,49 @@
+name = "image.deep_learning.monocular_depth_estimation"
+version = "1.0.0"
+display_name = "Depth Estimation"
+description = "Monocular Depth Estimation using deep learning models"
+order = 14
+gui = ["reactflow", "headless"]
+measure_time = true
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[properties]]
+name = "normalize"
+display_name = "Normalize (Min-Max)"
+type = "bool"
+default = true
+widget = "checkbox"
+
+[[properties]]
+name = "use_gpu"
+display_name = "Use GPU"
+type = "bool"
+default = true
+widget = "checkbox"
+disabled_while_streaming = true
+requires_gpu = true
+
+[[properties]]
+name = "model"
+display_name = "Model"
+type = "int"
+default = 4
+widget = "dropdown"
+disabled_while_streaming = true
+options = [
+    { value = 0, label = "Lite-Mono-Tiny 640x192" },
+    { value = 1, label = "Lite-Mono-Tiny 1024x320" },
+    { value = 2, label = "Lite-Mono-Small 640x192" },
+    { value = 3, label = "Lite-Mono-Small 1024x320" },
+    { value = 4, label = "Lite-Mono 640x192" },
+    { value = 5, label = "Lite-Mono 1024x320" },
+    { value = 6, label = "Lite-Mono-8M 640x192" },
+    { value = 7, label = "Lite-Mono-8M 1024x320" },
+    { value = 8, label = "Depth Anything V2 ViT-S" },
+    { value = 9, label = "Depth Anything V2 ViT-B" },
+    { value = 10, label = "Depth Anything V2 ViT-L" },
+]

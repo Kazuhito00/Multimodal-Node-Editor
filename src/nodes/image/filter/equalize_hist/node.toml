@@ -1,0 +1,11 @@
+name = "image.filter.equalize_hist"
+version = "1.0.0"
+display_name = "Equalize Hist"
+description = "Equalizes histogram of image (V channel in HSV)"
+order = 80
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"

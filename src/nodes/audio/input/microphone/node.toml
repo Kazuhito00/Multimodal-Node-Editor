@@ -1,0 +1,20 @@
+name = "audio.input.microphone"
+version = "1.0.0"
+display_name = "Mic"
+description = "Captures audio from the microphone and outputs waveform data."
+order = 10
+gui = ["reactflow", "headless"]
+colab = false
+
+[[ports]]
+name = "audio_out"
+data_type = "audio"
+direction = "out"
+
+[[properties]]
+name = "device_id"
+display_name = "Device"
+type = "int"
+default = -1
+widget = "dropdown"
+options_source = "audio_inputs"

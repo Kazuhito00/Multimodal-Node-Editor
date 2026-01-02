@@ -1,0 +1,29 @@
+name = "image.input.video_frame"
+version = "1.0.0"
+display_name = "Video Frame"
+description = "Output a single frame from video at specified position"
+order = 50
+gui = ["reactflow", "headless"]
+run_when_stopped = true  # STOP時も実行可能
+
+[[ports]]
+name = "image_out"
+data_type = "image"
+direction = "out"
+
+[[properties]]
+name = "frame_position"
+display_name = ""
+type = "int"
+default = 1
+widget = "seekbar"
+min = 1
+max = 1
+
+[[properties]]
+name = "file_path"
+display_name = "File"
+type = "string"
+default = ""
+widget = "file_picker"
+accept = ".mp4,.avi,.mov,.mkv,.webm"

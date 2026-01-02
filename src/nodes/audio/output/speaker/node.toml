@@ -1,0 +1,21 @@
+name = "audio.output.speaker"
+version = "1.0.0"
+display_name = "Speaker"
+description = "Plays audio through the speaker and displays waveform."
+order = 30
+gui = ["reactflow", "headless"]
+colab = false
+no_duplicate = true
+
+[[ports]]
+name = "audio"
+data_type = "audio"
+direction = "in"
+
+[[properties]]
+name = "device_id"
+display_name = "Device"
+type = "int"
+default = -1
+widget = "dropdown"
+options_source = "audio_outputs"

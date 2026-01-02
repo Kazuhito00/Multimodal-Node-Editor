@@ -1,0 +1,36 @@
+name = "text.process.text_join"
+version = "1.0.0"
+display_name = "Text Join"
+description = "Joins multiple text strings"
+order = 20
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "text"
+data_type = "string"
+direction = "out"
+preview = false
+
+[[ports]]
+name = "text1"
+data_type = "string"
+direction = "in"
+
+[[ports]]
+name = "text2"
+data_type = "string"
+direction = "in"
+
+[[properties]]
+name = "text1"
+display_name = "Text 1"
+type = "string"
+default = ""
+widget = "text_area"
+
+[[properties]]
+name = "text2"
+display_name = "Text 2"
+type = "string"
+default = ""
+widget = "text_area"

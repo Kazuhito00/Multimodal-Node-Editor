@@ -1,0 +1,42 @@
+name = "image.filter.apply_colormap"
+version = "1.0.0"
+display_name = "Apply Color Map"
+description = "Applies a color map to grayscale image"
+order = 10
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[properties]]
+name = "colormap"
+display_name = "Color Map"
+type = "int"
+default = 2
+widget = "dropdown"
+options = [
+    { value = 0, label = "Autumn" },
+    { value = 1, label = "Bone" },
+    { value = 2, label = "Jet" },
+    { value = 3, label = "Winter" },
+    { value = 4, label = "Rainbow" },
+    { value = 5, label = "Ocean" },
+    { value = 6, label = "Summer" },
+    { value = 7, label = "Spring" },
+    { value = 8, label = "Cool" },
+    { value = 9, label = "HSV" },
+    { value = 10, label = "Pink" },
+    { value = 11, label = "Hot" },
+    { value = 12, label = "Parula" },
+    { value = 13, label = "Magma" },
+    { value = 14, label = "Inferno" },
+    { value = 15, label = "Plasma" },
+    { value = 16, label = "Viridis" },
+    { value = 17, label = "Cividis" },
+    { value = 18, label = "Twilight" },
+    { value = 19, label = "Twilight Shifted" },
+    { value = 20, label = "Turbo" },
+    { value = 21, label = "Deep Green" },
+]

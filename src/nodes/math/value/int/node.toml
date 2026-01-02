@@ -1,0 +1,21 @@
+name = "math.value.int"
+version = "1.0.0"
+display_name = "Int"
+description = "Output an integer value"
+order = 10
+gui = ["reactflow", "headless"]
+measure_time = false
+run_when_stopped = true  # STOP時も実行可能
+
+[[ports]]
+name = "value"
+data_type = "float"
+direction = "out"
+
+[[properties]]
+name = "value"
+display_name = "Value"
+type = "int"
+default = 0
+widget = "number_input"
+step = 1

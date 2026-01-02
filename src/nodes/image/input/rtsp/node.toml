@@ -1,0 +1,19 @@
+name = "image.input.rtsp"
+version = "1.0.0"
+display_name = "RTSP"
+description = "Stream video from RTSP URL"
+order = 60
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image_out"
+data_type = "image"
+direction = "out"
+
+[[properties]]
+name = "url"
+display_name = "URL"
+type = "string"
+default = ""
+widget = "text_input"
+placeholder = "rtsp://..."

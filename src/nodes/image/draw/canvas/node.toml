@@ -1,0 +1,42 @@
+name = "image.draw.canvas"
+version = "1.0.0"
+display_name = "Draw Canvas"
+description = "Draw on canvas with color picker"
+order = 80
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[properties]]
+name = "pen_size"
+display_name = "Pen Size"
+type = "int"
+default = 5
+widget = "slider"
+min = 1
+max = 100
+
+[[properties]]
+name = "pen_color"
+display_name = "Color"
+type = "string"
+default = "#000000"
+widget = "color_picker"
+
+[[properties]]
+name = "draw_commands"
+display_name = ""
+type = "string"
+default = ""
+widget = "hidden"
+
+[[properties]]
+name = "reset"
+display_name = ""
+type = "bool"
+default = false
+widget = "button"
+button_label = "Reset"

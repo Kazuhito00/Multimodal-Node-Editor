@@ -1,0 +1,33 @@
+{
+  "config_version": "0.0.1",
+  "ui": {
+    "theme": "light",
+    "sidebar": {
+      "show_edit": false,
+      "show_file": true,
+      "show_auto_layout": true
+    }
+  },
+  "node_search_paths": [
+    "src/nodes"
+  ],
+  "audio": {
+    "sample_rate": 16000
+  },
+  "camera": {
+    "max_scan_count": 2
+  },
+  "graph": {
+    "interval_ms": 50
+  },
+  "auto_download": {
+    "video": false,
+    "wav": false,
+    "capture": false,
+    "text": false
+  },
+  "api_keys": {
+    "openai": "",
+    "google_stt": ""
+  }
+}

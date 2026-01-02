@@ -1,0 +1,18 @@
+name = "image.filter.filter2d"
+version = "1.0.0"
+display_name = "Filter 2D (3x3)"
+description = "Apply 3x3 convolution filter to image"
+order = 90
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[properties]]
+name = "kernel"
+display_name = "Kernel"
+type = "string"
+default = "0,0,0,0,1,0,0,0,0"
+widget = "matrix3x3"

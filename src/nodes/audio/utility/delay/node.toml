@@ -1,0 +1,26 @@
+name = "audio.utility.delay"
+version = "1.0.0"
+display_name = "Delay"
+description = "Delay audio signal by specified milliseconds"
+order = 10
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "audio"
+data_type = "audio"
+direction = "inout"
+
+[[ports]]
+name = "delay_ms"
+data_type = "int"
+direction = "in"
+
+[[properties]]
+name = "delay_ms"
+display_name = "Delay(ms)"
+type = "int"
+default = 0
+widget = "number_input"
+min = 0
+max = 5000
+step = 10

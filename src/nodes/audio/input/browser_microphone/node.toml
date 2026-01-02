@@ -1,0 +1,39 @@
+name = "audio.input.browser_microphone"
+version = "1.0.0"
+display_name = "Mic (WebSocket)"
+description = "Captures audio from the browser using getUserMedia() API."
+order = 11
+gui = ["reactflow"]
+
+[[ports]]
+name = "audio_out"
+data_type = "audio"
+direction = "out"
+
+[[properties]]
+name = "echo_cancellation"
+display_name = "Echo Cancel"
+type = "bool"
+default = false
+widget = "checkbox"
+
+[[properties]]
+name = "noise_suppression"
+display_name = "Noise Suppress"
+type = "bool"
+default = false
+widget = "checkbox"
+
+[[properties]]
+name = "auto_gain_control"
+display_name = "Auto Gain"
+type = "bool"
+default = false
+widget = "checkbox"
+
+[[properties]]
+name = "browser_audio"
+display_name = ""
+type = "string"
+default = ""
+widget = "browser_microphone"

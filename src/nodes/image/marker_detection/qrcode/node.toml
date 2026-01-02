@@ -1,0 +1,17 @@
+name = "image.marker_detection.qrcode"
+version = "1.0.0"
+display_name = "QR Code"
+description = "Detect and decode QR codes in image"
+order = 10
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[ports]]
+name = "result_json"
+data_type = "string"
+direction = "out"
+preview = false

@@ -1,0 +1,38 @@
+name = "image.filter.threshold"
+version = "1.0.0"
+display_name = "Threshold"
+description = "Apply threshold to image"
+order = 180
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[properties]]
+name = "threshold"
+display_name = "Th"
+type = "int"
+default = 128
+widget = "slider"
+min = 0
+max = 255
+step = 1
+visible_when = { property = "algorithm", values = [0, 1, 2, 3, 4] }
+
+[[properties]]
+name = "algorithm"
+display_name = "Algorithm"
+type = "int"
+default = 0
+widget = "dropdown"
+options = [
+    { value = 0, label = "Binary" },
+    { value = 1, label = "Binary Inv" },
+    { value = 2, label = "Trunc" },
+    { value = 3, label = "To Zero" },
+    { value = 4, label = "To Zero Inv" },
+    { value = 5, label = "Otsu" },
+    { value = 6, label = "Triangle" },
+]

@@ -1,0 +1,21 @@
+name = "math.value.float"
+version = "1.0.0"
+display_name = "Float"
+description = "Output a float value"
+order = 20
+gui = ["reactflow", "headless"]
+measure_time = false
+run_when_stopped = true  # STOP時も実行可能
+
+[[ports]]
+name = "value"
+data_type = "float"
+direction = "out"
+
+[[properties]]
+name = "value"
+display_name = "Value"
+type = "float"
+default = 0.0
+widget = "number_input"
+step = 0.1

@@ -1,0 +1,4 @@
+display_name = "Recognition"
+order = 23
+default_open = false
+requires_config = "api_keys.google_stt"

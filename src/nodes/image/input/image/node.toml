@@ -1,0 +1,20 @@
+name = "image.input.image"
+version = "1.0.0"
+display_name = "Image"
+description = "Load static image files (jpg, png, bmp)"
+order = 10
+gui = ["reactflow", "headless"]
+run_when_stopped = true  # STOP時も実行可能
+
+[[ports]]
+name = "image_out"
+data_type = "image"
+direction = "out"
+
+[[properties]]
+name = "file_path"
+display_name = "File"
+type = "string"
+default = ""
+widget = "file_picker"
+accept = ".jpg,.jpeg,.png,.bmp,.gif,.webp"

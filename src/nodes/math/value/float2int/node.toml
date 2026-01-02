@@ -1,0 +1,30 @@
+name = "math.value.float2int"
+version = "1.0.0"
+display_name = "Float2Int"
+description = "Convert float to integer with rounding mode"
+order = 40
+gui = ["reactflow", "headless"]
+measure_time = false
+run_when_stopped = true  # STOP時も実行可能
+
+[[ports]]
+name = "in"
+data_type = "float"
+direction = "in"
+
+[[ports]]
+name = "out"
+data_type = "float"
+direction = "out"
+
+[[properties]]
+name = "mode"
+display_name = "Mode"
+type = "int"
+default = 2
+widget = "dropdown"
+options = [
+    { value = 0, label = "Round" },
+    { value = 1, label = "Ceil" },
+    { value = 2, label = "Floor" },
+]

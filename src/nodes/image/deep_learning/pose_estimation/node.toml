@@ -1,0 +1,50 @@
+name = "image.deep_learning.pose_estimation"
+version = "1.0.0"
+display_name = "Pose Estimation"
+description = "Estimate human body pose using MediaPipe or ViTPose models"
+order = 20
+gui = ["reactflow", "headless"]
+measure_time = true
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[ports]]
+name = "detection_result"
+data_type = "string"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "result_json"
+data_type = "string"
+direction = "out"
+preview = false
+
+[[properties]]
+name = "model"
+display_name = "Model"
+type = "int"
+default = 0
+widget = "dropdown"
+disabled_while_streaming = true
+options = [
+    { value = 0, label = "MediaPipe Pose landmarker (lite)" },
+    { value = 1, label = "MediaPipe Pose landmarker (Full)" },
+    { value = 2, label = "MediaPipe Pose landmarker (Heavy)" },
+    { value = 3, label = "ViTPose S" },
+    { value = 4, label = "ViTPose B" },
+    { value = 5, label = "ViTPose L" },
+]
+
+[[properties]]
+name = "use_gpu"
+display_name = "Use GPU"
+type = "bool"
+default = true
+widget = "checkbox"
+disabled_while_streaming = true
+requires_gpu = true
+visible_when = { property = "model", values = [3, 4, 5] }

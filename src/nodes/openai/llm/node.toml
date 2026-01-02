@@ -1,0 +1,88 @@
+name = "openai.llm"
+version = "1.0.0"
+display_name = "OpenAI LLM"
+description = "OpenAI LLM API call node"
+order = 10
+gui = ["reactflow", "headless"]
+run_when_stopped = true
+measure_time = false
+
+# システムプロンプト（入力端子統合）
+[[ports]]
+name = "system_prompt"
+data_type = "string"
+direction = "in"
+
+# ユーザープロンプト（入力端子統合）
+[[ports]]
+name = "user_prompt"
+data_type = "string"
+direction = "in"
+
+# 結果出力
+[[ports]]
+name = "result_text"
+data_type = "string"
+direction = "out"
+
+# 実行トリガー（ボタンと統合）
+[[ports]]
+name = "execute"
+data_type = "trigger"
+direction = "in"
+
+# プロパティ: システムプロンプト
+[[properties]]
+name = "system_prompt"
+display_name = "System Prompt"
+type = "string"
+default = ""
+widget = "text_area"
+
+# プロパティ: ユーザープロンプト
+[[properties]]
+name = "user_prompt"
+display_name = "User Prompt"
+type = "string"
+default = ""
+widget = "text_area"
+
+# プロパティ: Temperature（gpt-5系では非表示）
+[[properties]]
+name = "temperature"
+display_name = "Temp"
+type = "float"
+default = 0.7
+min = 0.0
+max = 2.0
+step = 0.1
+widget = "slider"
+visible_when = { property = "model", values = ["gpt-4.1-nano", "gpt-4.1-mini", "gpt-4.1", "gpt-4o", "gpt-4o-mini"] }
+
+# プロパティ: モデル選択
+[[properties]]
+name = "model"
+display_name = "Model"
+type = "string"
+default = "gpt-4.1-mini"
+widget = "dropdown"
+options = [
+    { value = "gpt-5.2", label = "gpt-5.2" },
+    { value = "gpt-5.1", label = "gpt-5.1" },
+    { value = "gpt-5-nano", label = "gpt-5-nano" },
+    { value = "gpt-5-mini", label = "gpt-5-mini" },
+    { value = "gpt-5", label = "gpt-5" },
+    { value = "gpt-4.1-nano", label = "gpt-4.1-nano" },
+    { value = "gpt-4.1-mini", label = "gpt-4.1-mini" },
+    { value = "gpt-4.1", label = "gpt-4.1" },
+]
+
+# プロパティ: 実行ボタン
+[[properties]]
+name = "execute"
+display_name = ""
+type = "bool"
+default = false
+widget = "button"
+button_label = "Execute"
+requires_streaming = true

@@ -1,0 +1,13 @@
+name = "image.analysis.fft"
+version = "1.0.0"
+display_name = "FFT"
+description = "Display FFT (Fast Fourier Transform) magnitude spectrum of input image"
+order = 30
+gui = ["reactflow", "headless"]
+run_when_stopped = true
+resizable = true
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"

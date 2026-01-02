@@ -1,0 +1,17 @@
+name = "audio.utility.waveform_to_image"
+version = "1.0.0"
+display_name = "Waveform to Image"
+description = "Convert audio waveform to image"
+order = 30
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "audio"
+data_type = "audio"
+direction = "in"
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "out"
+

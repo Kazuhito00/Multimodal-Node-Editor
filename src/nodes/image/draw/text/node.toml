@@ -1,0 +1,45 @@
+name = "image.draw.text"
+version = "1.0.0"
+display_name = "Draw Text (ASCII)"
+description = "Draw ASCII text on image using OpenCV"
+order = 10
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[ports]]
+name = "text"
+data_type = "string"
+direction = "in"
+
+[[properties]]
+name = "x"
+type = "int"
+default = 10
+widget = "xy_input"
+
+[[properties]]
+name = "y"
+type = "int"
+default = 10
+widget = "xy_input"
+
+[[properties]]
+name = "font_size"
+display_name = "Size"
+type = "int"
+default = 32
+widget = "number_input"
+min = 8
+max = 256
+step = 4
+
+[[properties]]
+name = "color"
+display_name = "Color"
+type = "string"
+default = "#00ff00"
+widget = "color_picker"

@@ -1,0 +1,71 @@
+name = "audio.dynamics.compressor"
+version = "1.0.0"
+display_name = "Dynamic Range Compression"
+description = "Compress audio dynamic range with threshold, ratio, attack, and release"
+order = 12
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "audio"
+data_type = "audio"
+direction = "inout"
+
+[[ports]]
+name = "threshold"
+data_type = "float"
+direction = "in"
+
+[[ports]]
+name = "ratio"
+data_type = "float"
+direction = "in"
+
+[[ports]]
+name = "attack_ms"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "release_ms"
+data_type = "int"
+direction = "in"
+
+[[properties]]
+name = "threshold"
+display_name = "Threshold"
+type = "float"
+default = 0.5
+widget = "number_input"
+min = 0.0
+max = 1.0
+step = 0.01
+
+[[properties]]
+name = "ratio"
+display_name = "Ratio"
+type = "float"
+default = 4.0
+widget = "number_input"
+min = 1.0
+max = 20.0
+step = 0.1
+
+[[properties]]
+name = "attack_ms"
+display_name = "Attack(ms)"
+type = "int"
+default = 0
+widget = "number_input"
+min = 0
+max = 1000
+step = 10
+
+[[properties]]
+name = "release_ms"
+display_name = "Release(ms)"
+type = "int"
+default = 0
+widget = "number_input"
+min = 0
+max = 1000
+step = 10

@@ -1,0 +1,71 @@
+name = "audio.dynamics.noise_gate"
+version = "1.0.0"
+display_name = "Noise Gate"
+description = "Gate audio signals below threshold to silence"
+order = 14
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "audio"
+data_type = "audio"
+direction = "inout"
+
+[[ports]]
+name = "threshold"
+data_type = "float"
+direction = "in"
+
+[[ports]]
+name = "attack_ms"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "release_ms"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "hold_ms"
+data_type = "int"
+direction = "in"
+
+[[properties]]
+name = "threshold"
+display_name = "Threshold"
+type = "float"
+default = 0.02
+widget = "number_input"
+min = 0.0
+max = 1.0
+step = 0.01
+
+[[properties]]
+name = "attack_ms"
+display_name = "Attack(ms)"
+type = "int"
+default = 0
+widget = "number_input"
+min = 0
+max = 1000
+step = 10
+
+[[properties]]
+name = "release_ms"
+display_name = "Release(ms)"
+type = "int"
+default = 0
+widget = "number_input"
+min = 0
+max = 1000
+step = 10
+
+[[properties]]
+name = "hold_ms"
+display_name = "Hold(ms)"
+type = "int"
+default = 0
+widget = "number_input"
+min = 0
+max = 1000
+step = 10

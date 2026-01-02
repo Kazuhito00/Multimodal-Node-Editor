@@ -1,0 +1,56 @@
+name = "audio.filter.equalizer"
+version = "1.0.0"
+display_name = "Equalizer"
+description = "Boost or cut frequencies within a specified range"
+order = 50
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "audio"
+data_type = "audio"
+direction = "inout"
+
+[[ports]]
+name = "high_freq"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "low_freq"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "gain_db"
+data_type = "float"
+direction = "in"
+
+[[properties]]
+name = "high_freq"
+display_name = "High Freq(Hz)"
+type = "int"
+default = 4000
+widget = "number_input"
+min = 100
+max = 20000
+step = 100
+
+[[properties]]
+name = "low_freq"
+display_name = "Low Freq(Hz)"
+type = "int"
+default = 2000
+widget = "number_input"
+min = 20
+max = 20000
+step = 100
+
+[[properties]]
+name = "gain_db"
+display_name = "dB"
+type = "float"
+default = 0.0
+widget = "slider"
+min = -24.0
+max = 24.0
+step = 0.5

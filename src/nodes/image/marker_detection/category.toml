@@ -1,0 +1,4 @@
+category_id = "image.marker_detection"
+display_name = "Marker Detection"
+order = 25
+default_open = false

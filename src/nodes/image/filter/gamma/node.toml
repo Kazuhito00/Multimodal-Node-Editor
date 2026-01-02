@@ -1,0 +1,26 @@
+name = "image.filter.gamma"
+version = "1.0.0"
+display_name = "Gamma"
+description = "Applies gamma correction to image"
+order = 110
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[ports]]
+name = "gamma"
+data_type = "float"
+direction = "in"
+
+[[properties]]
+name = "gamma"
+display_name = "Value"
+type = "float"
+default = 1.0
+widget = "slider"
+min = 0.1
+max = 5.0
+step = 0.1

@@ -1,0 +1,53 @@
+name = "image.input.video"
+version = "1.0.0"
+display_name = "Video"
+description = "Load and play video files (mp4, avi)"
+order = 40
+gui = ["reactflow", "headless"]
+run_when_stopped = true
+
+[[ports]]
+name = "image_out"
+data_type = "image"
+direction = "out"
+
+[[ports]]
+name = "audio_out"
+data_type = "audio"
+direction = "out"
+
+[[properties]]
+name = "realtime_sync"
+display_name = "Realtime Sync"
+type = "bool"
+default = true
+widget = "checkbox"
+disabled_while_streaming = true
+
+[[properties]]
+name = "frame_step"
+display_name = "Frame Step"
+type = "int"
+default = 1
+min = 1
+max = 100
+step = 1
+widget = "number_input"
+disabled_while_streaming = true
+visible_when = { property = "realtime_sync", values = [false] }
+
+[[properties]]
+name = "preload_all"
+display_name = "Preload All Frames"
+type = "bool"
+default = false
+widget = "checkbox"
+disabled_while_streaming = true
+
+[[properties]]
+name = "file_path"
+display_name = "File"
+type = "string"
+default = ""
+widget = "file_picker"
+accept = ".mp4,.avi,.mov,.mkv"

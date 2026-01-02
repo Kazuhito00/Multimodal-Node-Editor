@@ -1,0 +1,31 @@
+name = "openai.realtime_stt"
+version = "1.0.0"
+display_name = "OpenAI STT"
+description = "OpenAI Realtime Speech-to-Text"
+order = 25
+gui = ["reactflow", "headless"]
+measure_time = false
+
+# オーディオ入力
+[[ports]]
+name = "audio"
+data_type = "audio"
+direction = "in"
+
+# テキスト出力
+[[ports]]
+name = "result_text"
+data_type = "string"
+direction = "out"
+
+# プロパティ: モデル選択
+[[properties]]
+name = "model"
+display_name = "Model"
+type = "string"
+default = "gpt-4o-realtime-preview"
+widget = "dropdown"
+options = [
+    { value = "gpt-4o-realtime-preview", label = "gpt-4o-realtime-preview" },
+    { value = "gpt-4o-mini-realtime-preview", label = "gpt-4o-mini-realtime-preview" },
+]

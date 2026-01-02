@@ -1,0 +1,37 @@
+name = "image.filter.inpaint"
+version = "1.0.0"
+display_name = "Inpaint"
+description = "Restore image regions using inpainting"
+order = 140
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[ports]]
+name = "mask"
+data_type = "image"
+direction = "in"
+
+[[properties]]
+name = "radius"
+display_name = "Radius"
+type = "int"
+default = 3
+widget = "slider"
+min = 1
+max = 20
+step = 1
+
+[[properties]]
+name = "algorithm"
+display_name = "Algorithm"
+type = "int"
+default = 0
+widget = "dropdown"
+options = [
+    { value = 0, label = "Telea" },
+    { value = 1, label = "Navier-Stokes" },
+]

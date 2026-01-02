@@ -1,0 +1,32 @@
+name = "image.input.browser_webcam"
+version = "1.0.0"
+display_name = "Webcam (WebSocket)"
+description = "Captures video frames from the browser using getUserMedia() API."
+order = 30
+gui = ["reactflow"]
+run_when_stopped = true
+node_disable = true
+
+[[ports]]
+name = "image_out"
+data_type = "image"
+direction = "out"
+
+[[properties]]
+name = "resolution"
+display_name = "Resolution"
+type = "string"
+default = "1280x720"
+widget = "dropdown"
+options = [
+    { value = "640x480", label = "640x480 (VGA)" },
+    { value = "1280x720", label = "1280x720 (HD)" },
+    { value = "1920x1080", label = "1920x1080 (FHD)" },
+]
+
+[[properties]]
+name = "browser_frame"
+display_name = ""
+type = "string"
+default = ""
+widget = "browser_webcam"

@@ -1,0 +1,34 @@
+name = "image.input.webcam"
+version = "1.0.0"
+display_name = "Webcam"
+description = "Captures live video frames from the webcam."
+order = 20
+gui = ["reactflow", "headless"]
+colab = false
+run_when_stopped = true
+no_duplicate = true
+
+[[ports]]
+name = "image_out"
+data_type = "image"
+direction = "out"
+
+[[properties]]
+name = "camera_id"
+display_name = "Camera"
+type = "int"
+default = 0
+widget = "dropdown"
+options_source = "cameras"
+
+[[properties]]
+name = "resolution"
+display_name = "Resolution"
+type = "string"
+default = "1280x720"
+widget = "dropdown"
+options = [
+    { value = "640x480", label = "640x480 (VGA)" },
+    { value = "1280x720", label = "1280x720 (HD)" },
+    { value = "1920x1080", label = "1920x1080 (FHD)" },
+]

@@ -1,0 +1,11 @@
+name = "image.filter.sepia"
+version = "1.0.0"
+display_name = "Sepia"
+description = "Applies sepia tone effect to image"
+order = 170
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"

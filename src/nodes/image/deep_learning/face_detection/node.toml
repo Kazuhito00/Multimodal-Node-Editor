@@ -1,0 +1,112 @@
+name = "image.deep_learning.face_detection"
+version = "1.0.0"
+display_name = "Face Detection"
+description = "Detect faces in image using MediaPipe BlazeFace"
+order = 12
+gui = ["reactflow", "headless"]
+measure_time = true
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[ports]]
+name = "result_json"
+data_type = "string"
+direction = "out"
+preview = false
+
+[[properties]]
+name = "score_threshold"
+display_name = "Score Th"
+type = "float"
+default = 0.5
+widget = "slider"
+min = 0.0
+max = 1.0
+step = 0.01
+
+[[properties]]
+name = "use_motpy"
+display_name = "Use motpy"
+type = "bool"
+default = false
+widget = "checkbox"
+visible_when = { property = "model", values = [0, 2] }
+
+[[properties]]
+name = "motpy_min_iou"
+display_name = "motpy Min IOU"
+type = "float"
+default = 0.2
+widget = "slider"
+min = 0.0
+max = 1.0
+step = 0.01
+visible_when = { property = "use_motpy", values = [true] }
+
+[[properties]]
+name = "motpy_multi_match_min_iou"
+display_name = "motpy Multi IOU"
+type = "float"
+default = 0.9
+widget = "slider"
+min = 0.0
+max = 1.0
+step = 0.01
+visible_when = { property = "use_motpy", values = [true] }
+
+[[properties]]
+name = "use_sahi"
+display_name = "Use SAHI"
+type = "bool"
+default = false
+widget = "checkbox"
+visible_when = { property = "model", values = [0, 2] }
+
+[[properties]]
+name = "sahi_slice_width"
+display_name = "SAHI Slice W"
+type = "int"
+default = 320
+widget = "slider"
+min = 64
+max = 640
+step = 32
+visible_when = { property = "use_sahi", values = [true] }
+
+[[properties]]
+name = "sahi_slice_height"
+display_name = "SAHI Slice H"
+type = "int"
+default = 320
+widget = "slider"
+min = 64
+max = 640
+step = 32
+visible_when = { property = "use_sahi", values = [true] }
+
+[[properties]]
+name = "sahi_overlap_ratio"
+display_name = "SAHI Overlap"
+type = "float"
+default = 0.2
+widget = "slider"
+min = 0.0
+max = 0.5
+step = 0.05
+visible_when = { property = "use_sahi", values = [true] }
+
+[[properties]]
+name = "model"
+display_name = "Model"
+type = "int"
+default = 0
+widget = "dropdown"
+disabled_while_streaming = true
+options = [
+    { value = 0, label = "BlazeFace (short-range)" },
+    { value = 1, label = "FaceLandmark (478 points)" },
+    { value = 2, label = "YuNet" },
+]

@@ -1,0 +1,15 @@
+name = "text.output.text_display"
+version = "1.0.0"
+display_name = "Text Display"
+description = "Display text content"
+order = 10
+gui = ["reactflow", "headless"]
+run_when_stopped = true
+measure_time = false
+resizable = true
+
+[[ports]]
+name = "text_in"
+data_type = "string"
+direction = "in"
+preview = false

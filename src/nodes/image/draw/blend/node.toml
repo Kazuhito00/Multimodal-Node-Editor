@@ -1,0 +1,42 @@
+name = "image.draw.blend"
+version = "1.0.0"
+display_name = "Blend"
+description = "Blends two images with various modes"
+order = 94
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "out"
+
+[[ports]]
+name = "image1"
+display_name = "Image 1"
+data_type = "image"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "image2"
+display_name = "Image 2"
+data_type = "image"
+direction = "in"
+preview = false
+
+[[properties]]
+name = "mode"
+display_name = "Mode"
+type = "int"
+default = 0
+widget = "dropdown"
+options = [
+    { value = 0, label = "Add" },
+    { value = 1, label = "Subtract" },
+    { value = 2, label = "Multiply" },
+    { value = 3, label = "Screen" },
+    { value = 4, label = "Overlay" },
+    { value = 5, label = "Darken" },
+    { value = 6, label = "Lighten" },
+    { value = 7, label = "Difference" },
+]

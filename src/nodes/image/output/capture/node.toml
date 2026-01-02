@@ -1,0 +1,25 @@
+name = "image.output.capture"
+version = "1.0.0"
+display_name = "Capture"
+description = "Capture images on trigger and download as zip"
+order = 15
+gui = ["reactflow", "headless"]
+run_when_stopped = true
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "in"
+
+[[ports]]
+name = "capture"
+data_type = "trigger"
+direction = "in"
+
+[[properties]]
+name = "capture"
+display_name = ""
+type = "bool"
+default = false
+widget = "button"
+button_label = "Capture"

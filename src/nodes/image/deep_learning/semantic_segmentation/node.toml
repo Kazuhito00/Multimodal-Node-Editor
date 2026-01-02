@@ -1,0 +1,39 @@
+name = "image.deep_learning.semantic_segmentation"
+version = "1.0.0"
+display_name = "Semantic Segmentation"
+description = "Semantic segmentation using various deep learning models"
+order = 22
+gui = ["reactflow", "headless"]
+measure_time = true
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[properties]]
+name = "model"
+display_name = "Model"
+type = "int"
+default = 0
+widget = "dropdown"
+disabled_while_streaming = true
+options = [
+    { value = 0, label = "MediaPipe selfie_segmentation (square)" },
+    { value = 1, label = "MediaPipe selfie_segmentation (landscape)" },
+    { value = 2, label = "MediaPipe Hair Segmentation" },
+    { value = 3, label = "MediaPipe Selfie Multiclass" },
+    { value = 4, label = "PP-LiteSeg (STDC1)" },
+    { value = 5, label = "PP-LiteSeg (STDC2)" },
+    { value = 6, label = "Road Segmentation (ADAS 0001)" },
+]
+
+[[properties]]
+name = "use_gpu"
+display_name = "Use GPU"
+type = "bool"
+default = true
+widget = "checkbox"
+disabled_while_streaming = true
+requires_gpu = true
+visible_when = { property = "model", values = [4, 5, 6] }

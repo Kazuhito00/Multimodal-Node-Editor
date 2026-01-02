@@ -1,0 +1,55 @@
+name = "image.filter.blur"
+version = "1.0.0"
+display_name = "Blur"
+description = "Applies blur filter to image"
+order = 30
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[ports]]
+name = "kernel_size"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "sigma"
+data_type = "float"
+direction = "in"
+
+[[properties]]
+name = "kernel_size"
+display_name = "Kernel Size"
+type = "int"
+default = 5
+widget = "slider"
+min = 1
+max = 49
+step = 2
+
+[[properties]]
+name = "sigma"
+display_name = "Sigma"
+type = "float"
+default = 1.0
+widget = "slider"
+min = 0.1
+max = 20.0
+step = 0.1
+visible_when = { property = "algorithm", values = [1, 3] }
+
+[[properties]]
+name = "algorithm"
+display_name = "Algorithm"
+type = "int"
+default = 0
+widget = "dropdown"
+options = [
+    { value = 0, label = "Box" },
+    { value = 1, label = "Gaussian" },
+    { value = 2, label = "Median" },
+    { value = 3, label = "Bilateral" },
+]

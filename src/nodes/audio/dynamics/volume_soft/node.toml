@@ -1,0 +1,26 @@
+name = "audio.dynamics.volume_soft"
+version = "1.0.0"
+display_name = "Volume(Soft Limit : tanh)"
+description = "Adjust audio volume with soft clipping using tanh"
+order = 11
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "audio"
+data_type = "audio"
+direction = "inout"
+
+[[ports]]
+name = "scale"
+data_type = "float"
+direction = "in"
+
+[[properties]]
+name = "scale"
+display_name = "Scale"
+type = "float"
+default = 1.0
+widget = "number_input"
+min = 0.0
+max = 20.0
+step = 0.1

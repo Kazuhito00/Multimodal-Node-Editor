@@ -1,0 +1,20 @@
+name = "utility.trigger_button"
+version = "1.0.0"
+display_name = "Trigger Button"
+description = "Output 1 when button is pressed, 0 otherwise"
+order = 25
+gui = ["reactflow", "headless"]
+measure_time = false
+
+[[ports]]
+name = "out"
+data_type = "trigger"
+direction = "out"
+
+[[properties]]
+name = "button"
+display_name = ""
+type = "bool"
+default = false
+widget = "button"
+button_label = "Trigger"

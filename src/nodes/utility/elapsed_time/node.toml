@@ -1,0 +1,23 @@
+name = "utility.elapsed_time"
+version = "1.0.0"
+display_name = "Elapsed Time"
+description = "Output elapsed time since START"
+order = 10
+gui = ["reactflow", "headless"]
+measure_time = false
+
+[[ports]]
+name = "time"
+data_type = "float"
+direction = "out"
+
+[[properties]]
+name = "unit"
+display_name = "Unit"
+type = "string"
+default = "sec"
+widget = "dropdown"
+options = [
+    { value = "sec", label = "Seconds" },
+    { value = "ms", label = "Milliseconds" }
+]

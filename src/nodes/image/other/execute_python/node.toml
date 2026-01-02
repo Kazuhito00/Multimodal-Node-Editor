@@ -1,0 +1,76 @@
+name = "image.other.execute_python"
+version = "1.0.0"
+display_name = "Execute Python"
+description = "Execute Python code on image"
+order = 100
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+# AIコード生成を使用するか（OpenAI APIキー設定時のみ表示）
+[[properties]]
+name = "use_ai_codegen"
+display_name = "AI Code Generation"
+type = "bool"
+default = false
+widget = "checkbox"
+requires_api_key = "openai"
+
+# コード生成モデル
+[[properties]]
+name = "codegen_model"
+display_name = "Model"
+type = "string"
+default = "gpt-4.1-mini"
+widget = "dropdown"
+options = [
+    { value = "gpt-5.2", label = "gpt-5.2" },
+    { value = "gpt-5.1", label = "gpt-5.1" },
+    { value = "gpt-5-nano", label = "gpt-5-nano" },
+    { value = "gpt-5-mini", label = "gpt-5-mini" },
+    { value = "gpt-5", label = "gpt-5" },
+    { value = "gpt-4.1-nano", label = "gpt-4.1-nano" },
+    { value = "gpt-4.1-mini", label = "gpt-4.1-mini" },
+    { value = "gpt-4.1", label = "gpt-4.1" },
+]
+visible_when = { property = "use_ai_codegen", values = [true] }
+
+# コード生成プロンプト
+[[properties]]
+name = "codegen_prompt"
+display_name = "Prompt"
+type = "string"
+default = ""
+widget = "text_area"
+rows = 4
+visible_when = { property = "use_ai_codegen", values = [true] }
+
+# コード生成ボタン
+[[properties]]
+name = "generate_code"
+display_name = ""
+type = "bool"
+default = false
+widget = "button"
+button_label = "Generate Code"
+visible_when = { property = "use_ai_codegen", values = [true] }
+
+# コード入力欄
+[[properties]]
+name = "code"
+display_name = "Code"
+type = "string"
+default = """# Sample: Hue shift in HSV color space
+
+# input_image: receives image from node input
+hsv = cv2.cvtColor(input_image, cv2.COLOR_BGR2HSV)
+
+# Rotate hue by 90 degrees
+hsv[:, :, 0] = (hsv[:, :, 0] + 90) % 180
+
+# output_image: set result to node output
+output_image = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)"""
+widget = "text_area"

@@ -1,0 +1,34 @@
+name = "math.value.clamp"
+version = "1.0.0"
+display_name = "Clamp"
+description = "Clamp a value between min and max"
+order = 30
+gui = ["reactflow", "headless"]
+measure_time = false
+run_when_stopped = true
+
+[[ports]]
+name = "value"
+data_type = "float"
+direction = "in"
+
+[[ports]]
+name = "result"
+data_type = "float"
+direction = "out"
+
+[[properties]]
+name = "max"
+display_name = "Max"
+type = "float"
+default = 1.0
+widget = "number_input"
+step = 0.1
+
+[[properties]]
+name = "min"
+display_name = "Min"
+type = "float"
+default = 0.0
+widget = "number_input"
+step = 0.1

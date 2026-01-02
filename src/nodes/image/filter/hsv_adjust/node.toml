@@ -1,0 +1,56 @@
+name = "image.filter.hsv_adjust"
+version = "1.0.0"
+display_name = "HSV Adjust"
+description = "Adjusts image HSV (Hue, Saturation, Value)"
+order = 130
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[ports]]
+name = "h_add"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "s_add"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "v_add"
+data_type = "int"
+direction = "in"
+
+[[properties]]
+name = "h_add"
+display_name = "H"
+type = "int"
+default = 0
+widget = "slider"
+min = -90
+max = 90
+step = 1
+
+[[properties]]
+name = "s_add"
+display_name = "S"
+type = "int"
+default = 0
+widget = "slider"
+min = -255
+max = 255
+step = 1
+
+[[properties]]
+name = "v_add"
+display_name = "V"
+type = "int"
+default = 0
+widget = "slider"
+min = -255
+max = 255
+step = 1

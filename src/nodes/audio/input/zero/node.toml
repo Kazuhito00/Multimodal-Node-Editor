@@ -1,0 +1,11 @@
+name = "audio.input.zero"
+version = "1.0.0"
+display_name = "Zero"
+description = "Output silent audio (all zeros)"
+order = 30
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "audio_out"
+data_type = "audio"
+direction = "out"

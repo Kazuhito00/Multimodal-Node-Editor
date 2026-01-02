@@ -1,0 +1,25 @@
+name = "image.filter.brightness"
+version = "1.0.0"
+display_name = "Brightness"
+description = "Adjusts image brightness"
+order = 40
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[ports]]
+name = "brightness"
+data_type = "int"
+direction = "in"
+
+[[properties]]
+name = "brightness"
+display_name = "Value"
+type = "int"
+default = 0
+widget = "slider"
+min = -255
+max = 255

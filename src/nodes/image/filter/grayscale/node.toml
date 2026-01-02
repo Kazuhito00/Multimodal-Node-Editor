@@ -1,0 +1,11 @@
+name = "image.filter.grayscale"
+version = "1.0.0"
+display_name = "Grayscale"
+description = "Converts image to grayscale"
+order = 120
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"

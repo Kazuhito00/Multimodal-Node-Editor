@@ -1,0 +1,64 @@
+name = "image.transform.rotate_3d"
+version = "1.0.0"
+display_name = "3D Rotate"
+description = "Rotate image in 3D space with pitch, yaw, roll"
+order = 162
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[ports]]
+name = "pitch"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "yaw"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "roll"
+data_type = "int"
+direction = "in"
+
+[[properties]]
+name = "pitch"
+display_name = "Pitch"
+type = "int"
+default = 0
+min = -180
+max = 180
+step = 10
+widget = "number_input"
+
+[[properties]]
+name = "yaw"
+display_name = "Yaw"
+type = "int"
+default = 0
+min = -180
+max = 180
+step = 10
+widget = "number_input"
+
+[[properties]]
+name = "roll"
+display_name = "Roll"
+type = "int"
+default = 0
+min = -180
+max = 180
+step = 10
+widget = "number_input"
+
+[[properties]]
+name = "border_color"
+display_name = "Border Color"
+type = "string"
+default = "#808080"
+widget = "color_picker"
+

@@ -1,0 +1,96 @@
+name = "image.filter.omnidirectional_viewer"
+version = "1.0.0"
+display_name = "Omnidirectional Viewer"
+description = "Transforms equirectangular 360 image with roll, pitch, yaw rotation"
+order = 150
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[ports]]
+name = "pitch"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "yaw"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "roll"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "width"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "height"
+data_type = "int"
+direction = "in"
+
+[[properties]]
+name = "pitch"
+display_name = "Pitch"
+type = "int"
+default = 0
+widget = "slider"
+min = 0
+max = 359
+step = 1
+
+[[properties]]
+name = "yaw"
+display_name = "Yaw"
+type = "int"
+default = 0
+widget = "slider"
+min = 0
+max = 359
+step = 1
+
+[[properties]]
+name = "roll"
+display_name = "Roll"
+type = "int"
+default = 0
+widget = "slider"
+min = 0
+max = 359
+step = 1
+
+[[properties]]
+name = "image_point"
+display_name = "Image Point"
+type = "float"
+default = 0.0
+widget = "slider"
+min = -1.0
+max = 3.0
+step = 0.1
+
+[[properties]]
+name = "width"
+display_name = "Width"
+type = "int"
+default = 640
+widget = "number_input"
+min = 1
+max = 7680
+step = 10
+
+[[properties]]
+name = "height"
+display_name = "Height"
+type = "int"
+default = 360
+widget = "number_input"
+min = 1
+max = 4320
+step = 10

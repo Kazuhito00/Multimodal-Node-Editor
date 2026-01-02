@@ -1,0 +1,28 @@
+name = "audio.deep_learning.classification"
+version = "1.0.0"
+display_name = "Classification"
+description = "Classify audio using deep learning models"
+order = 20
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "audio"
+data_type = "audio"
+direction = "inout"
+
+[[ports]]
+name = "result_json"
+data_type = "string"
+direction = "out"
+preview = false
+
+[[properties]]
+name = "model"
+display_name = "Model"
+type = "int"
+default = 0
+widget = "dropdown"
+disabled_while_streaming = true
+options = [
+    { value = 0, label = "MediaPipe YamNet" },
+]

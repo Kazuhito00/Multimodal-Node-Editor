@@ -1,0 +1,18 @@
+name = "math.logic.not"
+version = "1.0.0"
+display_name = "NOT"
+description = "Logical NOT - returns 1 if input is zero, 0 otherwise"
+order = 30
+gui = ["reactflow", "headless"]
+measure_time = false
+run_when_stopped = true
+
+[[ports]]
+name = "a"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "result"
+data_type = "int"
+direction = "out"

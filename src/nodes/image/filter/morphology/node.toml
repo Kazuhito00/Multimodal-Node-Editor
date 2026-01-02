@@ -1,0 +1,45 @@
+name = "image.filter.morphology"
+version = "1.0.0"
+display_name = "Morphology"
+description = "Applies morphological operations (dilation, erosion, opening, closing)"
+order = 35
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[properties]]
+name = "kernel_size"
+display_name = "Kernel Size"
+type = "int"
+default = 3
+widget = "slider"
+min = 1
+max = 31
+step = 2
+
+[[properties]]
+name = "iterations"
+display_name = "Iterations"
+type = "int"
+default = 1
+widget = "number_input"
+min = 1
+max = 10
+step = 1
+visible_when = { property = "operation", values = [0, 1] }
+
+[[properties]]
+name = "operation"
+display_name = "Operation"
+type = "int"
+default = 0
+widget = "dropdown"
+options = [
+    { value = 0, label = "Dilation" },
+    { value = 1, label = "Erosion" },
+    { value = 2, label = "Opening" },
+    { value = 3, label = "Closing" },
+]

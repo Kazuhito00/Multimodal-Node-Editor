@@ -1,0 +1,58 @@
+name = "audio.analysis.msc"
+version = "1.0.0"
+display_name = "MSC"
+description = "Magnitude Squared Coherence - calculate frequency-wise similarity between two audio signals"
+order = 25
+gui = ["reactflow", "headless"]
+resizable = true
+
+[[ports]]
+name = "audio_1"
+display_name = "Audio 1"
+data_type = "audio"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "audio_2"
+display_name = "Audio 2"
+data_type = "audio"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "out"
+
+[[properties]]
+name = "fft_size"
+display_name = "FFT Size"
+type = "int"
+default = 1024
+widget = "number_input"
+min = 256
+max = 4096
+step = 256
+
+[[properties]]
+name = "window_function"
+display_name = "Window Function"
+type = "int"
+default = 0
+widget = "dropdown"
+options = [
+    { value = 0, label = "Hamming" },
+    { value = 1, label = "Hanning" },
+]
+
+[[properties]]
+name = "smoothing"
+display_name = "Smoothing"
+type = "int"
+default = 5
+widget = "number_input"
+min = 1
+max = 20
+step = 1
+

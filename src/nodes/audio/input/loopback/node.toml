@@ -1,0 +1,13 @@
+name = "audio.input.loopback"
+version = "1.0.0"
+display_name = "Loopback (Windows)"
+description = "Captures system audio output via Windows Stereo Mix / loopback device"
+order = 35
+gui = ["reactflow", "headless"]
+platform = ["windows"]
+node_disable = true
+
+[[ports]]
+name = "audio_out"
+data_type = "audio"
+direction = "out"

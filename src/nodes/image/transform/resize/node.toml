@@ -1,0 +1,56 @@
+name = "image.transform.resize"
+version = "1.0.0"
+display_name = "Resize"
+description = "Resize image with various interpolation methods"
+order = 160
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+preview = false
+
+[[ports]]
+name = "width"
+data_type = "float"
+direction = "in"
+
+[[ports]]
+name = "height"
+data_type = "float"
+direction = "in"
+
+[[properties]]
+name = "width"
+display_name = "Width"
+type = "int"
+default = 640
+widget = "number_input"
+min = 1
+max = 7680
+step = 10
+
+[[properties]]
+name = "height"
+display_name = "Height"
+type = "int"
+default = 480
+widget = "number_input"
+min = 1
+max = 4320
+step = 10
+
+[[properties]]
+name = "method"
+display_name = "Method"
+type = "int"
+default = 1
+widget = "dropdown"
+options = [
+    { value = 0, label = "Nearest" },
+    { value = 1, label = "Linear" },
+    { value = 2, label = "Cubic" },
+    { value = 3, label = "Area" },
+    { value = 4, label = "Lanczos4" },
+]

@@ -1,0 +1,262 @@
+"""
+Bandstop Filter ノードの実装。
+指定した周波数帯域を除去する（ノッチフィルター）。
+"""
+from typing import Dict, Any, List
+from node_editor.node_def import ComputeLogic
+import numpy as np
+import threading
+
+try:
+    from scipy.signal import butter, sosfilt, sosfilt_zi
+    SCIPY_AVAILABLE = True
+except ImportError:
+    SCIPY_AVAILABLE = False
+
+
+class BandstopFilter:
+    """Butterworthバンドストップフィルター"""
+
+    def __init__(
+        self,
+        low_cutoff: int = 3000,
+        high_cutoff: int = 5000,
+        filter_order: int = 5,
+        sample_rate: int = 16000,
+    ):
+        self.low_cutoff = low_cutoff
+        self.high_cutoff = high_cutoff
+        self.filter_order = filter_order
+        self.sample_rate = sample_rate
+
+        # ナイキスト周波数
+        nyquist = sample_rate / 2
+
+        # カットオフ周波数を正規化（0より大きく1未満）
+        low_normalized = max(low_cutoff / nyquist, 0.01)
+        low_normalized = min(low_normalized, 0.99)
+
+        high_normalized = max(high_cutoff / nyquist, 0.01)
+        high_normalized = min(high_normalized, 0.99)
+
+        # low < high を保証
+        if low_normalized >= high_normalized:
+            high_normalized = min(low_normalized + 0.01, 0.99)
+
+        # Butterworthフィルター係数を計算（SOS形式）
+        self.sos = butter(
+            filter_order,
+            [low_normalized, high_normalized],
+            btype='bandstop',
+            output='sos'
+        )
+
+        # フィルター状態を初期化
+        self.zi = sosfilt_zi(self.sos)
+
+    def process(self, chunk: np.ndarray) -> np.ndarray:
+        """チャンクをフィルタリング"""
+        if len(chunk) == 0:
+            return chunk
+
+        # フィルター適用（状態を保持してストリーミング処理）
+        filtered, self.zi = sosfilt(self.sos, chunk, zi=self.zi)
+        return filtered.astype(np.float32)
+
+
+class WaveformBuffer:
+    """処理済みサンプルを蓄積する循環バッファ"""
+
+    def __init__(self, sample_rate: int, buffer_seconds: float = 5.0):
+        self.sample_rate = sample_rate
+        self.buffer_size = int(sample_rate * buffer_seconds)
+        self.buffer = np.zeros(self.buffer_size, dtype=np.float32)
+        self.write_pos = 0
+        self.valid_samples = 0
+        self.lock = threading.Lock()
+
+    def write(self, data: List[float]):
+        """データをバッファに書き込む"""
+        if not data:
+            return
+        with self.lock:
+            arr = np.array(data, dtype=np.float32)
+            n = len(arr)
+            if n >= self.buffer_size:
+                self.buffer[:] = arr[-self.buffer_size:]
+                self.write_pos = 0
+                self.valid_samples = self.buffer_size
+            else:
+                end_pos = self.write_pos + n
+                if end_pos <= self.buffer_size:
+                    self.buffer[self.write_pos:end_pos] = arr
+                else:
+                    first_part = self.buffer_size - self.write_pos
+                    self.buffer[self.write_pos:] = arr[:first_part]
+                    self.buffer[:n - first_part] = arr[first_part:]
+                self.write_pos = end_pos % self.buffer_size
+                self.valid_samples = min(self.valid_samples + n, self.buffer_size)
+
+    def get_waveform_display(self, display_width: int = 200) -> List[float]:
+        """表示用のmin/maxペアを生成"""
+        with self.lock:
+            if self.valid_samples == 0:
+                return [0.0] * (display_width * 2)
+
+            # バッファからデータを時系列順に取得
+            if self.valid_samples >= self.buffer_size:
+                waveform = np.concatenate([
+                    self.buffer[self.write_pos:],
+                    self.buffer[:self.write_pos]
+                ])
+            else:
+                start_pos = (self.write_pos - self.valid_samples) % self.buffer_size
+                if start_pos < self.write_pos:
+                    waveform = self.buffer[start_pos:self.write_pos].copy()
+                else:
+                    waveform = np.concatenate([
+                        self.buffer[start_pos:],
+                        self.buffer[:self.write_pos]
+                    ])
+
+            # min/max計算
+            samples_per_pixel = self.buffer_size // display_width
+            data_pixels = len(waveform) // samples_per_pixel if samples_per_pixel > 0 else 0
+            empty_pixels = display_width - data_pixels
+
+            result = []
+            for _ in range(empty_pixels):
+                result.extend([0.0, 0.0])
+
+            for i in range(data_pixels):
+                start = i * samples_per_pixel
+                end = start + samples_per_pixel
+                segment = waveform[start:end]
+                if len(segment) > 0:
+                    result.append(float(np.min(segment)))
+                    result.append(float(np.max(segment)))
+                else:
+                    result.extend([0.0, 0.0])
+
+            return result
+
+
+class BandstopFilterLogic(ComputeLogic):
+    """
+    バンドストップフィルターノードのロジック。
+    指定した周波数帯域を除去する。
+    """
+
+    def __init__(self):
+        self._buffer: WaveformBuffer | None = None
+        self._filter: BandstopFilter | None = None
+        self._last_low_cutoff: int = -1
+        self._last_high_cutoff: int = -1
+        self._last_filter_order: int = -1
+        self._last_sample_rate: int = -1
+
+    def reset(self):
+        """バッファとフィルターをリセット"""
+        self._buffer = None
+        self._filter = None
+
+    def compute(
+        self,
+        inputs: Dict[str, Any],
+        properties: Dict[str, Any],
+        context: Dict[str, Any] = None
+    ) -> Dict[str, Any]:
+        if not SCIPY_AVAILABLE:
+            return {
+                "audio": None,
+                "__error__": "scipy is not installed"
+            }
+
+        audio_in = inputs.get("audio")
+
+        if audio_in is None:
+            return {"audio": None}
+
+        # パラメータ取得（ポート入力を優先）
+        high_cutoff = inputs.get("high_cutoff")
+        if high_cutoff is None:
+            high_cutoff = int(properties.get("high_cutoff", 5000))
+        else:
+            high_cutoff = int(high_cutoff)
+
+        low_cutoff = inputs.get("low_cutoff")
+        if low_cutoff is None:
+            low_cutoff = int(properties.get("low_cutoff", 3000))
+        else:
+            low_cutoff = int(low_cutoff)
+
+        filter_order = inputs.get("filter_order")
+        if filter_order is None:
+            filter_order = int(properties.get("filter_order", 5))
+        else:
+            filter_order = int(filter_order)
+
+        # 値をクランプ
+        low_cutoff = max(20, min(20000, low_cutoff))
+        high_cutoff = max(100, min(20000, high_cutoff))
+        filter_order = max(1, min(10, filter_order))
+
+        # low < high を保証
+        if low_cutoff >= high_cutoff:
+            high_cutoff = low_cutoff + 100
+
+        sample_rate = audio_in.get("sample_rate", 16000)
+        duration = audio_in.get("duration", 5.0)
+
+        # カットオフ周波数がナイキスト周波数を超えないようにする
+        max_cutoff = int(sample_rate / 2 - 1)
+        low_cutoff = min(low_cutoff, max_cutoff - 100)
+        high_cutoff = min(high_cutoff, max_cutoff)
+
+        # バッファを初期化（初回のみ）
+        if self._buffer is None:
+            self._buffer = WaveformBuffer(sample_rate, duration)
+
+        # パラメータが変更された場合、フィルターを再作成
+        params_changed = (
+            self._last_low_cutoff != low_cutoff or
+            self._last_high_cutoff != high_cutoff or
+            self._last_filter_order != filter_order or
+            self._last_sample_rate != sample_rate
+        )
+
+        if self._filter is None or params_changed:
+            self._filter = BandstopFilter(
+                low_cutoff=low_cutoff,
+                high_cutoff=high_cutoff,
+                filter_order=filter_order,
+                sample_rate=sample_rate,
+            )
+            self._last_low_cutoff = low_cutoff
+            self._last_high_cutoff = high_cutoff
+            self._last_filter_order = filter_order
+            self._last_sample_rate = sample_rate
+
+        # deltaを取得してフィルタリング
+        delta = audio_in.get("delta", [])
+        if len(delta) > 0:
+            delta_array = np.array(delta, dtype=np.float32)
+            filtered = self._filter.process(delta_array)
+            filtered_delta = filtered.tolist()
+        else:
+            filtered_delta = []
+
+        # 処理済みdeltaをバッファに蓄積
+        self._buffer.write(filtered_delta)
+
+        # バッファから表示用waveformを生成
+        waveform_display = self._buffer.get_waveform_display(200)
+
+        return {
+            "audio": {
+                "delta": filtered_delta,
+                "waveform": waveform_display,
+                "sample_rate": sample_rate,
+                "duration": duration,
+            }
+        }

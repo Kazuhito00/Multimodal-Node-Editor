@@ -1,0 +1,80 @@
+name = "text.process.text_format"
+version = "1.0.0"
+display_name = "Text Format"
+description = "Formats text with placeholders {1}, {2}, etc."
+order = 30
+gui = ["reactflow", "headless"]
+dynamic_ports = "Text"
+
+[[ports]]
+name = "format"
+data_type = "string"
+direction = "out"
+preview = false
+
+[[ports]]
+name = "Text 1"
+data_type = "string"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "Text 2"
+data_type = "string"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "Text 3"
+data_type = "string"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "Text 4"
+data_type = "string"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "Text 5"
+data_type = "string"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "Text 6"
+data_type = "string"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "Text 7"
+data_type = "string"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "Text 8"
+data_type = "string"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "Text 9"
+data_type = "string"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "Text 10"
+data_type = "string"
+direction = "in"
+preview = false
+
+[[properties]]
+name = "format"
+display_name = "Format"
+type = "string"
+default = "This is a sample Text Format node. {1} will be replaced with the specified text."
+widget = "text_area"

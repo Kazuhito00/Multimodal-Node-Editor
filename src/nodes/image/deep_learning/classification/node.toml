@@ -1,0 +1,57 @@
+name = "image.deep_learning.classification"
+version = "1.0.0"
+display_name = "Classification"
+description = "Classify images using deep learning models (ImageNet 1000 classes)"
+order = 5
+gui = ["reactflow", "headless"]
+measure_time = true
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[ports]]
+name = "detection_json"
+data_type = "string"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "result_json"
+data_type = "string"
+direction = "out"
+preview = false
+
+[[properties]]
+name = "top_k"
+display_name = "Top K"
+type = "int"
+default = 5
+widget = "number_input"
+min = 1
+max = 10
+step = 1
+
+[[properties]]
+name = "model"
+display_name = "Model"
+type = "int"
+default = 0
+widget = "dropdown"
+disabled_while_streaming = true
+options = [
+    { value = 0, label = "MobileNetV3-Small" },
+    { value = 1, label = "MobileNetV3-Large" },
+    { value = 2, label = "EfficientNetLite4" },
+    { value = 3, label = "MNIST" },
+]
+
+[[properties]]
+name = "use_gpu"
+display_name = "Use GPU"
+type = "bool"
+default = true
+widget = "checkbox"
+disabled_while_streaming = true
+requires_gpu = true

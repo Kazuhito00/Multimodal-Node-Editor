@@ -1,0 +1,23 @@
+name = "image.filter.rgb_extract"
+version = "1.0.0"
+display_name = "RGB Extract"
+description = "Extracts a single RGB channel from image"
+order = 128
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[properties]]
+name = "channel"
+display_name = "Channel"
+type = "int"
+default = 0
+widget = "dropdown"
+options = [
+    { value = 0, label = "R" },
+    { value = 1, label = "G" },
+    { value = 2, label = "B" },
+]

@@ -1,0 +1,25 @@
+name = "audio.input.noise"
+version = "1.0.0"
+display_name = "Noise"
+description = "Generate various types of noise"
+order = 25
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "audio_out"
+data_type = "audio"
+direction = "out"
+
+[[properties]]
+name = "noise_type"
+display_name = "Type"
+type = "string"
+default = "white"
+widget = "dropdown"
+options = [
+    { value = "white", label = "White Noise" },
+    { value = "pink", label = "Pink Noise" },
+    { value = "hiss", label = "Hiss Noise" },
+    { value = "hum", label = "Hum Noise" },
+    { value = "pulse", label = "Pulse Noise" }
+]

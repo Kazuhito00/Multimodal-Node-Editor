@@ -1,0 +1,30 @@
+name = "image.marker_detection.apriltag"
+version = "1.0.0"
+display_name = "AprilTag"
+description = "Detect AprilTag markers in image"
+order = 30
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[ports]]
+name = "result_json"
+data_type = "string"
+direction = "out"
+preview = false
+
+[[properties]]
+name = "dictionary"
+display_name = "Dictionary"
+type = "int"
+default = 17
+widget = "dropdown"
+options = [
+    { value = 17, label = "16h5" },
+    { value = 18, label = "25h9" },
+    { value = 19, label = "36h10" },
+    { value = 20, label = "36h11" },
+]

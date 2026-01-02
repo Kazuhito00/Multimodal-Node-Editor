@@ -1,0 +1,43 @@
+name = "image.marker_detection.aruco"
+version = "1.0.0"
+display_name = "ArUco Marker"
+description = "Detect ArUco markers in image"
+order = 20
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[ports]]
+name = "result_json"
+data_type = "string"
+direction = "out"
+preview = false
+
+[[properties]]
+name = "dictionary"
+display_name = "Dictionary"
+type = "int"
+default = 0
+widget = "dropdown"
+options = [
+    { value = 0, label = "4x4 (50)" },
+    { value = 1, label = "4x4 (100)" },
+    { value = 2, label = "4x4 (250)" },
+    { value = 3, label = "4x4 (1000)" },
+    { value = 4, label = "5x5 (50)" },
+    { value = 5, label = "5x5 (100)" },
+    { value = 6, label = "5x5 (250)" },
+    { value = 7, label = "5x5 (1000)" },
+    { value = 8, label = "6x6 (50)" },
+    { value = 9, label = "6x6 (100)" },
+    { value = 10, label = "6x6 (250)" },
+    { value = 11, label = "6x6 (1000)" },
+    { value = 12, label = "7x7 (50)" },
+    { value = 13, label = "7x7 (100)" },
+    { value = 14, label = "7x7 (250)" },
+    { value = 15, label = "7x7 (1000)" },
+    { value = 16, label = "ARUCO_ORIGINAL" },
+]

@@ -1,0 +1,27 @@
+name = "image.filter.background_subtraction"
+version = "1.0.0"
+display_name = "Background Subtraction"
+description = "Detect foreground using background subtraction"
+order = 20
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[ports]]
+name = "background"
+data_type = "image"
+direction = "in"
+
+[[properties]]
+name = "algorithm"
+display_name = "Algorithm"
+type = "int"
+default = 0
+widget = "dropdown"
+options = [
+    { value = 0, label = "MOG2" },
+    { value = 1, label = "KNN" },
+]

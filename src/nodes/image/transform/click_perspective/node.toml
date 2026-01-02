@@ -1,0 +1,91 @@
+name = "image.transform.click_perspective"
+version = "1.0.0"
+display_name = "Click Perspective"
+description = "Applies perspective transformation using 4 corner points"
+order = 163
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "in"
+preview = true
+
+[[ports]]
+name = "output"
+data_type = "image"
+direction = "out"
+preview = false
+
+[[properties]]
+name = "x1"
+type = "float"
+default = 0.0
+
+[[properties]]
+name = "y1"
+type = "float"
+default = 0.0
+
+[[properties]]
+name = "x2"
+type = "float"
+default = 1.0
+
+[[properties]]
+name = "y2"
+type = "float"
+default = 0.0
+
+[[properties]]
+name = "x3"
+type = "float"
+default = 1.0
+
+[[properties]]
+name = "y3"
+type = "float"
+default = 1.0
+
+[[properties]]
+name = "x4"
+type = "float"
+default = 0.0
+
+[[properties]]
+name = "y4"
+type = "float"
+default = 1.0
+
+[[properties]]
+name = "output_width"
+display_name = "Output Width"
+type = "int"
+default = 640
+widget = "number_input"
+min = 1
+max = 7680
+step = 10
+
+[[properties]]
+name = "output_height"
+display_name = "Output Height"
+type = "int"
+default = 480
+widget = "number_input"
+min = 1
+max = 4320
+step = 10
+
+[[properties]]
+name = "current_point"
+display_name = "Current Click Point"
+type = "int"
+default = 1
+widget = "dropdown"
+options = [
+    { value = 1, label = "Point 1" },
+    { value = 2, label = "Point 2" },
+    { value = 3, label = "Point 3" },
+    { value = 4, label = "Point 4" },
+]

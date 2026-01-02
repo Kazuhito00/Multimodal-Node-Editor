@@ -1,0 +1,49 @@
+name = "image.input.solid_color"
+version = "1.0.0"
+display_name = "Solid Color"
+description = "Generate a solid color image"
+order = 70
+gui = ["reactflow", "headless"]
+run_when_stopped = true  # STOP時も実行可能
+
+[[ports]]
+name = "image_out"
+data_type = "image"
+direction = "out"
+
+[[ports]]
+name = "width"
+data_type = "float"
+direction = "in"
+
+[[ports]]
+name = "height"
+data_type = "float"
+direction = "in"
+
+[[properties]]
+name = "width"
+display_name = "Width"
+type = "int"
+default = 640
+min = 1
+max = 4096
+step = 10
+widget = "number_input"
+
+[[properties]]
+name = "height"
+display_name = "Height"
+type = "int"
+default = 360
+min = 1
+max = 4096
+step = 10
+widget = "number_input"
+
+[[properties]]
+name = "color"
+display_name = "Color"
+type = "string"
+default = "#ff0000"
+widget = "color_picker"

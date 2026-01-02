@@ -1,0 +1,25 @@
+name = "image.transform.flip"
+version = "1.0.0"
+display_name = "Flip"
+description = "Flips image horizontally and/or vertically"
+order = 100
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[properties]]
+name = "horizontal"
+display_name = "Horizontal"
+type = "bool"
+default = true
+widget = "checkbox"
+
+[[properties]]
+name = "vertical"
+display_name = "Vertical"
+type = "bool"
+default = false
+widget = "checkbox"

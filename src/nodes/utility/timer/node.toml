@@ -1,0 +1,34 @@
+name = "utility.timer"
+version = "1.0.0"
+display_name = "Timer Trigger"
+description = "Output 1 at specified intervals, 0 otherwise"
+order = 20
+gui = ["reactflow", "headless"]
+measure_time = false
+
+[[ports]]
+name = "trigger"
+data_type = "trigger"
+direction = "out"
+
+[[properties]]
+name = "interval"
+display_name = "Interval"
+type = "int"
+default = 5
+min = 1
+max = 7200
+step = 1
+widget = "number_input"
+
+[[properties]]
+name = "unit"
+display_name = "Unit"
+type = "string"
+default = "sec"
+widget = "dropdown"
+options = [
+    { value = "sec", label = "Seconds" },
+    { value = "ms", label = "Milliseconds" }
+]
+

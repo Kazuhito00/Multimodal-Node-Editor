@@ -1,0 +1,25 @@
+name = "text.process.json_parse"
+version = "1.0.0"
+display_name = "JSON Parse"
+description = "Parses JSON string and extracts value by key/path"
+order = 40
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "json"
+data_type = "string"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "value"
+data_type = "string"
+direction = "out"
+preview = false
+
+[[properties]]
+name = "key"
+display_name = "Key"
+type = "string"
+default = ""
+widget = "text_input"

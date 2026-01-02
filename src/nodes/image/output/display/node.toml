@@ -1,0 +1,13 @@
+name = "image.output.display"
+version = "1.0.0"
+display_name = "Image Display"
+description = "Displays an image in the node editor."
+order = 10
+gui = ["reactflow", "headless"]
+run_when_stopped = true  # STOP時も実行可能
+resizable = true  # ノードのリサイズを許可
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "in"

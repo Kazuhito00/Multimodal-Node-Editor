@@ -1,0 +1,56 @@
+name = "openai.image_generation"
+version = "1.0.0"
+display_name = "OpenAI Image Generation"
+description = "OpenAI Image Generation API (DALL-E)"
+order = 30
+gui = ["reactflow", "headless"]
+measure_time = false
+
+# プロンプト入力（入力端子統合）
+[[ports]]
+name = "prompt"
+data_type = "string"
+direction = "in"
+
+# 画像出力
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "out"
+
+# 実行トリガー（ボタンと統合）
+[[ports]]
+name = "execute"
+data_type = "trigger"
+direction = "in"
+
+# プロパティ: プロンプト
+[[properties]]
+name = "prompt"
+display_name = "Prompt"
+type = "string"
+default = ""
+widget = "text_area"
+
+# プロパティ: モデル選択
+[[properties]]
+name = "model"
+display_name = "Model"
+type = "string"
+default = "dall-e-3"
+widget = "dropdown"
+options = [
+    { value = "gpt-image-1", label = "gpt-image-1" },
+    { value = "dall-e-3", label = "dall-e-3" },
+    { value = "dall-e-2", label = "dall-e-2" },
+]
+
+# プロパティ: 実行ボタン
+[[properties]]
+name = "execute"
+display_name = ""
+type = "bool"
+default = false
+widget = "button"
+button_label = "Generate"
+requires_streaming = true

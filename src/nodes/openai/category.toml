@@ -1,0 +1,4 @@
+display_name = "OpenAI"
+order = 30
+default_open = false
+requires_config = "api_keys.openai"

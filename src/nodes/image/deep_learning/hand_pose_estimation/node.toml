@@ -1,0 +1,29 @@
+name = "image.deep_learning.hand_pose_estimation"
+version = "1.0.0"
+display_name = "Hand Pose Estimation"
+description = "Estimate hand pose using MediaPipe HandLandmarker"
+order = 21
+gui = ["reactflow", "headless"]
+measure_time = true
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[ports]]
+name = "result_json"
+data_type = "string"
+direction = "out"
+preview = false
+
+[[properties]]
+name = "model"
+display_name = "Model"
+type = "int"
+default = 0
+widget = "dropdown"
+disabled_while_streaming = true
+options = [
+    { value = 0, label = "MediaPipe HandLandmarker (full)" },
+]

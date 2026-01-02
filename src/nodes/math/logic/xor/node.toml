@@ -1,0 +1,23 @@
+name = "math.logic.xor"
+version = "1.0.0"
+display_name = "XOR"
+description = "Logical XOR - returns 1 if exactly one input is non-zero"
+order = 40
+gui = ["reactflow", "headless"]
+measure_time = false
+run_when_stopped = true
+
+[[ports]]
+name = "a"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "b"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "result"
+data_type = "int"
+direction = "out"

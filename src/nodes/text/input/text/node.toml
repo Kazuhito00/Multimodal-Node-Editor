@@ -1,0 +1,20 @@
+name = "text.input.text"
+version = "1.0.0"
+display_name = "Text"
+description = "Text input node"
+order = 10
+gui = ["reactflow", "headless"]
+run_when_stopped = true
+measure_time = false
+
+[[ports]]
+name = "text_out"
+data_type = "string"
+direction = "out"
+
+[[properties]]
+name = "text"
+display_name = ""
+type = "string"
+default = ""
+widget = "text_area"

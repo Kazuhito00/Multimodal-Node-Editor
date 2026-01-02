@@ -1,0 +1,64 @@
+name = "image.draw.picture_in_picture"
+version = "1.0.0"
+display_name = "Picture In Picture"
+description = "Overlay an image on another image at specified region"
+order = 93
+gui = ["reactflow", "headless"]
+run_when_stopped = true
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "out"
+
+[[ports]]
+name = "Image 1"
+data_type = "image"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "Image 2"
+data_type = "image"
+direction = "in"
+preview = false
+
+[[properties]]
+name = "min_x"
+display_name = "Min X"
+type = "float"
+default = 0.7
+widget = "slider"
+min = 0.0
+max = 1.0
+step = 0.01
+
+[[properties]]
+name = "min_y"
+display_name = "Min Y"
+type = "float"
+default = 0.7
+widget = "slider"
+min = 0.0
+max = 1.0
+step = 0.01
+
+[[properties]]
+name = "max_x"
+display_name = "Max X"
+type = "float"
+default = 0.9
+widget = "slider"
+min = 0.0
+max = 1.0
+step = 0.01
+
+[[properties]]
+name = "max_y"
+display_name = "Max Y"
+type = "float"
+default = 0.9
+widget = "slider"
+min = 0.0
+max = 1.0
+step = 0.01

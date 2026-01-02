@@ -1,0 +1,67 @@
+name = "image.draw.multi_image_concat"
+version = "1.0.0"
+display_name = "Multi Image Concat"
+description = "Concatenate multiple images in a grid layout with dynamic ports"
+order = 91
+gui = ["reactflow", "headless"]
+run_when_stopped = true
+dynamic_ports = "Image"
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "out"
+
+[[ports]]
+name = "Image 1"
+data_type = "image"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "Image 2"
+data_type = "image"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "Image 3"
+data_type = "image"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "Image 4"
+data_type = "image"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "Image 5"
+data_type = "image"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "Image 6"
+data_type = "image"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "Image 7"
+data_type = "image"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "Image 8"
+data_type = "image"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "Image 9"
+data_type = "image"
+direction = "in"
+preview = false

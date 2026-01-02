@@ -1,0 +1,70 @@
+name = "image.draw.alpha_blend"
+version = "1.0.0"
+display_name = "Alpha Blend"
+description = "Blends two images with alpha, beta, gamma weights"
+order = 95
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "out"
+
+[[ports]]
+name = "image1"
+display_name = "Image 1"
+data_type = "image"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "image2"
+display_name = "Image 2"
+data_type = "image"
+direction = "in"
+preview = false
+
+[[ports]]
+name = "alpha"
+data_type = "float"
+direction = "in"
+
+[[ports]]
+name = "beta"
+data_type = "float"
+direction = "in"
+
+[[ports]]
+name = "gamma"
+data_type = "float"
+direction = "in"
+
+[[properties]]
+name = "alpha"
+display_name = "Alpha"
+type = "float"
+default = 0.5
+widget = "slider"
+min = 0.0
+max = 1.0
+step = 0.01
+
+[[properties]]
+name = "beta"
+display_name = "Beta"
+type = "float"
+default = 0.5
+widget = "slider"
+min = 0.0
+max = 1.0
+step = 0.01
+
+[[properties]]
+name = "gamma"
+display_name = "Gamma"
+type = "float"
+default = 0.0
+widget = "slider"
+min = -255.0
+max = 255.0
+step = 1.0

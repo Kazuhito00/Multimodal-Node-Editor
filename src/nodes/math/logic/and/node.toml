@@ -1,0 +1,23 @@
+name = "math.logic.and"
+version = "1.0.0"
+display_name = "AND"
+description = "Logical AND - returns 1 if both inputs are non-zero"
+order = 10
+gui = ["reactflow", "headless"]
+measure_time = false
+run_when_stopped = true
+
+[[ports]]
+name = "a"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "b"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "result"
+data_type = "int"
+direction = "out"

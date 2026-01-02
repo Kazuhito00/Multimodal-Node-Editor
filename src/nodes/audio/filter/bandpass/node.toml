@@ -1,0 +1,56 @@
+name = "audio.filter.bandpass"
+version = "1.0.0"
+display_name = "Bandpass Filter"
+description = "Pass frequencies within a specified range"
+order = 30
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "audio"
+data_type = "audio"
+direction = "inout"
+
+[[ports]]
+name = "high_cutoff"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "low_cutoff"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "filter_order"
+data_type = "int"
+direction = "in"
+
+[[properties]]
+name = "high_cutoff"
+display_name = "High Cut Freq(Hz)"
+type = "int"
+default = 5000
+widget = "number_input"
+min = 100
+max = 20000
+step = 100
+
+[[properties]]
+name = "low_cutoff"
+display_name = "Low Cut Freq(Hz)"
+type = "int"
+default = 3000
+widget = "number_input"
+min = 20
+max = 20000
+step = 100
+
+[[properties]]
+name = "filter_order"
+display_name = "Filter Order"
+type = "int"
+default = 5
+widget = "number_input"
+min = 1
+max = 10
+step = 1

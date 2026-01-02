@@ -1,0 +1,56 @@
+name = "image.filter.rgb_adjust"
+version = "1.0.0"
+display_name = "RGB Adjust"
+description = "Adjusts image RGB channels"
+order = 129
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[ports]]
+name = "r_add"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "g_add"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "b_add"
+data_type = "int"
+direction = "in"
+
+[[properties]]
+name = "r_add"
+display_name = "R"
+type = "int"
+default = 0
+widget = "slider"
+min = -255
+max = 255
+step = 1
+
+[[properties]]
+name = "g_add"
+display_name = "G"
+type = "int"
+default = 0
+widget = "slider"
+min = -255
+max = 255
+step = 1
+
+[[properties]]
+name = "b_add"
+display_name = "B"
+type = "int"
+default = 0
+widget = "slider"
+min = -255
+max = 255
+step = 1

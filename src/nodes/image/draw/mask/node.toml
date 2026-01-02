@@ -1,0 +1,32 @@
+name = "image.draw.mask"
+version = "1.0.0"
+display_name = "Draw Mask"
+description = "Draw a binary mask on the input image"
+order = 81
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "in"
+
+[[ports]]
+name = "mask"
+data_type = "image"
+direction = "out"
+
+[[properties]]
+name = "pen_size"
+display_name = "Pen Size"
+type = "int"
+default = 10
+widget = "slider"
+min = 1
+max = 100
+
+[[properties]]
+name = "draw_commands"
+display_name = ""
+type = "string"
+default = ""
+widget = "hidden"

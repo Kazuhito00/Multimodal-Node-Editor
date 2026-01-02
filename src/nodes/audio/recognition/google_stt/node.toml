@@ -1,0 +1,27 @@
+name = "audio.recognition.google_stt"
+version = "1.0.0"
+display_name = "Google STT"
+description = "Speech-to-Text using Google Cloud Speech-to-Text API"
+order = 10
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "audio"
+data_type = "audio"
+direction = "in"
+
+[[ports]]
+name = "text"
+data_type = "string"
+direction = "out"
+
+[[properties]]
+name = "language"
+display_name = "Language"
+type = "int"
+default = 0
+widget = "dropdown"
+options = [
+    { value = 0, label = "日本語" },
+    { value = 1, label = "English" },
+]

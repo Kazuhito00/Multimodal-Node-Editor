@@ -1,0 +1,41 @@
+name = "audio.filter.lowpass"
+version = "1.0.0"
+display_name = "Lowpass Filter"
+description = "Filter out frequencies above the cutoff frequency"
+order = 10
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "audio"
+data_type = "audio"
+direction = "inout"
+
+[[ports]]
+name = "cutoff_freq"
+data_type = "int"
+direction = "in"
+
+[[ports]]
+name = "filter_order"
+data_type = "int"
+direction = "in"
+
+[[properties]]
+name = "cutoff_freq"
+display_name = "High Cut Freq(Hz)"
+type = "int"
+default = 4000
+widget = "number_input"
+min = 100
+max = 20000
+step = 100
+
+[[properties]]
+name = "filter_order"
+display_name = "Filter Order"
+type = "int"
+default = 5
+widget = "number_input"
+min = 1
+max = 10
+step = 1

@@ -1,0 +1,28 @@
+name = "math.operation.sin"
+version = "1.0.0"
+display_name = "Sin"
+description = "Calculate sine of angle in degrees"
+order = 60
+gui = ["reactflow", "headless"]
+measure_time = false
+run_when_stopped = true  # STOP時も実行可能
+
+[[ports]]
+name = "result"
+data_type = "float"
+direction = "out"
+
+[[ports]]
+name = "degree"
+data_type = "float"
+direction = "in"
+
+[[properties]]
+name = "degree"
+display_name = "Degree"
+type = "float"
+default = 0.0
+min = -360.0
+max = 360.0
+step = 1.0
+widget = "number_input"

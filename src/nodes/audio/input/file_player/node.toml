@@ -1,0 +1,19 @@
+name = "audio.input.file_player"
+version = "1.0.0"
+display_name = "Audio File"
+description = "Load and play audio files (wav, mp3, flac, ogg)"
+order = 20
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "audio_out"
+data_type = "audio"
+direction = "out"
+
+[[properties]]
+name = "file_path"
+display_name = "File"
+type = "string"
+default = ""
+widget = "file_picker"
+accept = ".wav,.mp3,.flac,.ogg"

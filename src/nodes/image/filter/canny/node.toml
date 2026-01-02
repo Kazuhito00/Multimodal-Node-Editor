@@ -1,0 +1,39 @@
+name = "image.filter.canny"
+version = "1.0.0"
+display_name = "Canny"
+description = "Applies Canny edge detection to an image."
+order = 50
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "image"
+data_type = "image"
+direction = "inout"
+
+[[ports]]
+name = "low_threshold"
+data_type = "float"
+direction = "in"
+
+[[ports]]
+name = "high_threshold"
+data_type = "float"
+direction = "in"
+
+[[properties]]
+name = "low_threshold"
+display_name = "Low"
+type = "int"
+default = 50
+widget = "slider"
+min = 0
+max = 255
+
+[[properties]]
+name = "high_threshold"
+display_name = "High"
+type = "int"
+default = 150
+widget = "slider"
+min = 0
+max = 255
