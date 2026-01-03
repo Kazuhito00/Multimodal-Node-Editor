@@ -22,7 +22,7 @@ from gui.headless.headless_main import run_headless
 def main():
     parser = argparse.ArgumentParser(description="graph.json をヘッドレスで実行")
     parser.add_argument("graph_file", help="実行するgraph.jsonファイルのパス")
-    parser.add_argument("--interval", type=int, default=100, help="実行間隔（ミリ秒）")
+    parser.add_argument("--interval", type=int, default=50, help="実行間隔（ミリ秒）")
     parser.add_argument("--count", type=int, default=0, help="実行回数（0=無限、1=1回実行）")
     parser.add_argument("--show-all", action="store_true", help="全ての終端出力を表示（デフォルトは最終ノードのみ）")
     parser.add_argument("--no-resize", action="store_true", help="大きい画像のリサイズを無効化（デフォルトは1280x720にリサイズ）")
