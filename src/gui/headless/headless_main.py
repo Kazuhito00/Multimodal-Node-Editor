@@ -2,8 +2,11 @@
 graph.json をヘッドレスで実行するモジュール
 
 使用方法:
-    python run_graph_headless.py <graph.json>
-    python run_graph_headless.py graph.json --interval 100 --count 10
+    python run_headless.py <graph.json>
+    python run_headless.py graph.json --count 10
+    python run_headless.py graph.json --interval 100  # config.jsonの値を上書き
+
+実行間隔はconfig.jsonのgraph.interval_msの値を使用します（デフォルト50ms）。
 """
 
 import json
@@ -347,9 +350,8 @@ def extract_definition_ids_from_graph(frontend_data: dict) -> set:
 def run_headless(
     graph_file: Path,
     project_root: Path,
-    interval_ms: int = 100,
+    interval_ms: int | None = None,
     count: int = 0,
-    show_all: bool = False,
     resize_display: bool = True,
     config_file: Path | None = None,
 ) -> None:
@@ -359,9 +361,8 @@ def run_headless(
     Args:
         graph_file: グラフJSONファイルのパス
         project_root: プロジェクトルートディレクトリ
-        interval_ms: 実行間隔（ミリ秒）
+        interval_ms: 実行間隔（ミリ秒）。Noneの場合はconfig.jsonのgraph.interval_msを使用
         count: 実行回数（0=無限）
-        show_all: 全ての終端出力を表示するか（False=最終ノードのみ）
         resize_display: 大きい画像を1280x720にリサイズして表示するか（デフォルトTrue）
         config_file: 設定ファイルのパス（Noneの場合はproject_root/config.json）
     """
@@ -369,6 +370,10 @@ def run_headless(
     if config_file is None:
         config_file = project_root / "config.json"
     settings_manager = init_settings(config_file)
+
+    # interval_msが未指定の場合はconfig.jsonから読み込む（デフォルト50ms）
+    if interval_ms is None:
+        interval_ms = settings_manager.get("graph.interval_ms", 50)
 
     # graph.jsonを先に読み込んで、使用ノードを特定
     print(f"Loading graph from: {graph_file}")
