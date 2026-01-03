@@ -1080,9 +1080,11 @@ function CustomNode({ id, data, selected }: { id: string; data: NodeData; select
             </div>
           ))}
 
-        {/* スライダー、ドロップダウン、ファイルピッカー、チェックボックス、ボタン、カラーピッカー（TOML定義順で表示） */}
+        {/* プロパティウィジェット（TOML定義順で表示） */}
         {nodeData.propertyDefs?.filter((p) =>
-          (p.widget === 'slider' || p.widget === 'dropdown' || p.widget === 'file_picker' || p.widget === 'checkbox' || p.widget === 'button' || p.widget === 'color_picker') &&
+          (p.widget === 'slider' || p.widget === 'dropdown' || p.widget === 'file_picker' ||
+           p.widget === 'checkbox' || p.widget === 'button' || p.widget === 'color_picker' ||
+           p.widget === 'matrix3x3' || p.widget === 'number_input' || p.widget === 'text_input') &&
           isPropertyVisible(p, nodeData.properties, nodeData.apiKeysStatus)
         ).map((prop) => {
           if (prop.widget === 'slider') {
@@ -1216,8 +1218,7 @@ function CustomNode({ id, data, selected }: { id: string; data: NodeData; select
                 )}
               </div>
             );
-          } else {
-            // color_picker
+          } else if (prop.widget === 'color_picker') {
             return (
               <ColorPickerWidget
                 key={prop.name}
@@ -1226,25 +1227,19 @@ function CustomNode({ id, data, selected }: { id: string; data: NodeData; select
                 onChange={(value) => handlePropertyChange(prop.name, value)}
               />
             );
-          }
-        })}
-
-        {/* 3x3マトリックス入力 */}
-        {nodeData.propertyDefs?.filter((p) => p.widget === 'matrix3x3' && isPropertyVisible(p, nodeData.properties, nodeData.apiKeysStatus)).map((prop) => (
+          } else if (prop.widget === 'matrix3x3') {
+            return (
           <Matrix3x3Widget
             key={prop.name}
             prop={prop}
             value={(nodeData.properties[prop.name] as string) ?? prop.default ?? '0,0,0,0,1,0,0,0,0'}
             onChange={(value) => handlePropertyChange(prop.name, value)}
           />
-        ))}
-
-        {/* 数値入力 */}
-        {nodeData.propertyDefs?.filter((p) => p.widget === 'number_input' && isPropertyVisible(p, nodeData.properties, nodeData.apiKeysStatus)).map((prop) => {
+            );
+          } else if (prop.widget === 'number_input') {
           const inputPort = propertyInputPorts.get(prop.name);
           const connectedValue = nodeData.connectedProperties?.[prop.name];
           const isConnected = connectedValue !== undefined && typeof connectedValue === 'number';
-          // intプロパティに接続された場合は切り捨て
           const rawValue = isConnected ? connectedValue : ((nodeData.properties[prop.name] as number) ?? prop.default ?? 0);
           const displayValue = (isConnected && prop.type === 'int') ? Math.floor(rawValue) : rawValue;
           return (
@@ -1267,7 +1262,6 @@ function CustomNode({ id, data, selected }: { id: string; data: NodeData; select
                   prop={prop}
                   value={displayValue}
                   onChange={(value) => {
-                    // Clampノードの場合はmin/max逆転防止ハンドラを使用
                     if (isClampNode && (prop.name === 'min' || prop.name === 'max')) {
                       handleClampPropertyChange(prop.name, value);
                     } else {
@@ -1278,11 +1272,8 @@ function CustomNode({ id, data, selected }: { id: string; data: NodeData; select
               )}
             </div>
           );
-        })}
-
-        {/* テキスト入力 */}
-        {nodeData.propertyDefs?.filter((p) => p.widget === 'text_input' && isPropertyVisible(p, nodeData.properties, nodeData.apiKeysStatus)).map((prop) => {
-          // 同名のstring出力ポートを探す（text -> text_out のマッピング）
+          } else {
+            // text_input
           const outputPort = stringOutputPorts.find((p) => p.name === `${prop.name}_out` || p.name === prop.name);
           return (
             <div key={prop.name} className="text-input-with-handle">
@@ -1301,6 +1292,7 @@ function CustomNode({ id, data, selected }: { id: string; data: NodeData; select
               )}
             </div>
           );
+          }
         })}
 
         {/* テキスト表示（読み取り専用、string入力ポートの内容を表示） */}

@@ -25,15 +25,6 @@ options = [
 ]
 
 [[properties]]
-name = "use_gpu"
-display_name = "Use GPU"
-type = "bool"
-default = true
-widget = "checkbox"
-disabled_while_streaming = true
-requires_gpu = true
-
-[[properties]]
 name = "model"
 display_name = "Model"
 type = "int"
@@ -45,3 +36,12 @@ options = [
     { value = 1, label = "TBEFN" },
     { value = 2, label = "CPGA-Net" },
 ]
+
+[[properties]]
+name = "use_gpu"
+display_name = "Use GPU"
+type = "bool"
+default = true
+widget = "checkbox"
+disabled_while_streaming = true
+requires_gpu = true

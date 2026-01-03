@@ -19,15 +19,6 @@ default = true
 widget = "checkbox"
 
 [[properties]]
-name = "use_gpu"
-display_name = "Use GPU"
-type = "bool"
-default = true
-widget = "checkbox"
-disabled_while_streaming = true
-requires_gpu = true
-
-[[properties]]
 name = "model"
 display_name = "Model"
 type = "int"
@@ -47,3 +38,12 @@ options = [
     { value = 9, label = "Depth Anything V2 ViT-B" },
     { value = 10, label = "Depth Anything V2 ViT-L" },
 ]
+
+[[properties]]
+name = "use_gpu"
+display_name = "Use GPU"
+type = "bool"
+default = true
+widget = "checkbox"
+disabled_while_streaming = true
+requires_gpu = true
