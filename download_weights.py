@@ -3,8 +3,9 @@
 モデルウェイトファイルをGitHub Releasesからダウンロードして配置するスクリプト。
 
 使用方法:
-    python download_weights.py          # 既存ファイルはスキップ
-    python download_weights.py --force  # 全ファイルを強制的に上書き
+    python download_weights.py              # 既存ファイルはスキップ
+    python download_weights.py --force      # 全ファイルを強制的に上書き
+    python download_weights.py --max-size 150  # 150MB超のファイルはスキップ
 
 出力:
     各モデルファイルが元の格納場所に配置される
@@ -97,6 +98,16 @@ def format_size(size_bytes: int) -> str:
         return f"{size_bytes / (1024 * 1024 * 1024):.2f} GB"
 
 
+def get_remote_file_size(url: str) -> int:
+    """HEADリクエストでリモートファイルのサイズを取得（取得失敗時は0）"""
+    try:
+        request = urllib.request.Request(url, method='HEAD')
+        response = urllib.request.urlopen(request)
+        return int(response.headers.get('Content-Length', 0))
+    except Exception:
+        return 0
+
+
 def download_file_with_progress(
     url: str,
     dest_path: Path,
@@ -154,6 +165,13 @@ def parse_arguments() -> argparse.Namespace:
         action="store_true",
         help="既存ファイルを強制的に上書きする"
     )
+    parser.add_argument(
+        "--max-size", "-m",
+        type=float,
+        default=None,
+        metavar="MB",
+        help="指定サイズ（MB）を超えるファイルはスキップ"
+    )
     return parser.parse_args()
 
 
@@ -161,13 +179,16 @@ def main():
     # コマンドライン引数をパース
     args = parse_arguments()
     force_overwrite = args.force
+    max_size_mb = args.max_size
+    max_size_bytes = int(max_size_mb * 1024 * 1024) if max_size_mb else None
 
     # プロジェクトルートを取得（このスクリプトの親ディレクトリ）
     project_root = Path(__file__).resolve().parent
 
     total_files = len(MODEL_FILES)
     success_count = 0
-    skipped_count = 0
+    skipped_exists_count = 0
+    skipped_size_count = 0
     failed_files = []
 
     print("=" * 60)
@@ -177,6 +198,7 @@ def main():
     print(f"Target: {project_root}")
     print(f"Total files: {total_files}")
     print(f"Force overwrite: {force_overwrite}")
+    print(f"Max file size: {f'{max_size_mb} MB' if max_size_mb else 'unlimited'}")
     print("=" * 60)
     print()
 
@@ -186,10 +208,18 @@ def main():
 
         # 既存ファイルのスキップ判定
         if dest_path.exists() and not force_overwrite:
-            skipped_count += 1
+            skipped_exists_count += 1
             file_size = dest_path.stat().st_size
             print(f"({i}/{total_files}) SKIP: {filename} ({format_size(file_size)}) - already exists")
             continue
+
+        # ファイルサイズによるスキップ判定
+        if max_size_bytes:
+            remote_size = get_remote_file_size(url)
+            if remote_size > max_size_bytes:
+                skipped_size_count += 1
+                print(f"({i}/{total_files}) SKIP: {filename} ({format_size(remote_size)}) - exceeds max size")
+                continue
 
         # ダウンロード（進捗表示付き）
         prefix = f"({i}/{total_files}) {filename}"
@@ -206,13 +236,15 @@ def main():
             print(f"{line:<80}")
 
     # 結果サマリー
+    skipped_total = skipped_exists_count + skipped_size_count
     print()
     print("=" * 60)
     print("Summary")
     print("=" * 60)
-    print(f"  Downloaded: {success_count}/{total_files}")
-    print(f"  Skipped:    {skipped_count}/{total_files}")
-    print(f"  Failed:     {len(failed_files)}/{total_files}")
+    print(f"  Downloaded:       {success_count}/{total_files}")
+    print(f"  Skipped (exists): {skipped_exists_count}/{total_files}")
+    print(f"  Skipped (size):   {skipped_size_count}/{total_files}")
+    print(f"  Failed:           {len(failed_files)}/{total_files}")
 
     if failed_files:
         print()
@@ -223,7 +255,7 @@ def main():
             print(f"    Error: {error_msg}")
 
     print()
-    completed_count = success_count + skipped_count
+    completed_count = success_count + skipped_total
     if completed_count == total_files:
         print("All files are ready!")
         return 0
