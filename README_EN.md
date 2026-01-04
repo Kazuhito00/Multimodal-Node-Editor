@@ -137,7 +137,8 @@ Set the following keys in `config.json` as needed.
   |--------|-------------|
   | `--config <path>` | Path to config file (default: config.json) |
   <br>
-  Or run the following in separate terminals and access `http://localhost:5173/` in your browser.
+  Or run the following in separate terminals and access `http://localhost:5173/` in your browser.<br>
+  
   ```
   uvicorn src.gui.reactflow.backend.main:app --reload
   ```
