@@ -1,6 +1,5 @@
-<!--
-[Japanese/[English](README_EN.md)]
--->
+[[Japanese](README.md)/[English](README_EN.md)]
+
 # Multimodal-Node-Editor
 ノードエディターベースのマルチモーダル処理アプリケーションです。<br>
 画像・音声・テキストなどをノードを繋げ処理することが可能で、処理検討や処理比較での利用を想定しています。<br>
