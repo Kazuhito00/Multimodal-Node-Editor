@@ -136,7 +136,7 @@ Set the following keys in `config.json` as needed.
   | Option | Description |
   |--------|-------------|
   | `--config <path>` | Path to config file (default: config.json) |
-  <br>
+  
   Or run the following in separate terminals and access `http://localhost:5173/` in your browser.<br>
   
   ```
