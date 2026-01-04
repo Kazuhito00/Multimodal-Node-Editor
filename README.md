@@ -6,7 +6,7 @@
 画像・音声・テキストなどをノードを繋げ処理することが可能で、処理検討や処理比較での利用を想定しています。<br>
 
 
-<img src="https://github.com/user-attachments/assets/b19d20eb-185d-4123-b3f1-a3d5b36829fa" width="100%">
+<img src="https://github.com/user-attachments/assets/264acff2-4b6c-460f-b6a0-77fb959a6f66" width="100%">
 
 # Features
 - 画像・音声・テキスト・深層学習など、100 以上のノードを標準搭載
@@ -164,35 +164,35 @@ ReactFlowフロントエンドを起動せずにコマンドラインでグラ�
 # Usage
 <details>
 <summary>ノード配置 & 実行</summary>
-  
-1. サイドバーからノードをキャンバスにドラッグ＆ドロップ<br><img src="https://github.com/user-attachments/assets/466c6305-223a-4c5b-85fa-71ab0f4e69ba" width="50%">
-2. ノード間のポートを接続<br>※同色同士のポートで接続可能<br><img src="https://github.com/user-attachments/assets/3e1ca571-5272-405d-9648-420bf01741d1" width="50%">
-3. Start ボタンをクリックして実行(ショートカットキー：Ctrl + Enter)<br>※実行中はノード配置やポート接続の変更は不可<br><img src="https://github.com/user-attachments/assets/ebe44788-5a00-4fed-a2d2-abdbce15dc26" width="50%">
+
+1. サイドバーからノードをキャンバスにドラッグ＆ドロップ<br><img src="https://github.com/user-attachments/assets/186dccbf-cecb-48ac-86e3-975eaf6f9f7c" width="50%">
+2. ノード間のポートを接続<br>※同色同士のポートで接続可能<br><img src="https://github.com/user-attachments/assets/39594af8-8b7c-4fe7-be23-a68eaa968840" width="50%">
+3. Start ボタンをクリックして実行(ショートカットキー：Ctrl + Enter)<br>※実行中はノード配置やポート接続の変更は不可<br><img src="https://github.com/user-attachments/assets/c262bb0c-04a6-434f-92ac-00a43afe2864" width="50%">
 </details>
 
 <details>
 <summary>エッジ削除、ノード削除</summary>
   
-* 削除したいエッジやノードを選択してDeleteキー<br><img src="https://github.com/user-attachments/assets/7360f35d-3f75-4f51-a207-c7b00d13086d" width="50%">
+* 削除したいエッジやノードを選択してDeleteキー<br><img src="https://github.com/user-attachments/assets/3554273d-a265-4cf1-8eae-59bdbbd2b6d5" width="50%">
 </details>
 
 <details>
 <summary>グラフjsonエクスポート、インポート</summary>
-  
-* グラフjsonエクスポート：Save ボタンをクリック(ショートカットキー：Ctrl + S)<br><img src="https://github.com/user-attachments/assets/dbc5d746-64bb-4bc5-8c44-e54e496cbc6e" width="50%">
-* グラフjsonインポート：Load ボタンをクリック(ショートカットキー：Ctrl + L)<br><img src="https://github.com/user-attachments/assets/142b49ff-6549-48c5-8b57-b1830b86bad4" width="50%">
+
+* グラフjsonエクスポート：Save ボタンをクリック(ショートカットキー：Ctrl + S)<br><img src="https://github.com/user-attachments/assets/e13218ae-9af6-494c-b97c-a9b1b3558736" width="50%">
+* グラフjsonインポート：Load ボタンをクリック(ショートカットキー：Ctrl + L)<br><img src="https://github.com/user-attachments/assets/17df193c-ab7f-43f7-ac3b-6b14b2d8bb0a" width="50%">
 </details>
 
 <details>
 <summary>オートレイアウト</summary>
-  
-* Auto Layout ボタンをクリック(ショートカットキー：Ctrl + A)<br><img src="https://github.com/user-attachments/assets/37beeef9-520b-4f02-be2b-3ba9323e54f7" width="50%">
+
+* Auto Layout ボタンをクリック(ショートカットキー：Ctrl + A)<br><img src="https://github.com/user-attachments/assets/4f8c6417-a8df-40a7-904f-4a943c4b66e9" width="50%">
 </details>
 
 <details>
 <summary>ノードへのコメント</summary>
-  
-* ノードを右クリックして、Add Commentをクリック<br><img src="https://github.com/user-attachments/assets/3c82bef0-fbf5-4e24-8fa7-4fd38706e424" width="50%">
+
+* ノードを右クリックして、Add Commentをクリック<br><img src="https://github.com/user-attachments/assets/14a18fcf-51c5-4d27-bd33-122cd5a44d5b" width="50%">
 </details>
 
 # Keyboard Shortcuts
