@@ -70,7 +70,7 @@ google-cloud-speech 2.35.0    or later
 </details>
 
 # Installation
-Goolge Colaboratory起動を行う方は、以下の作業は不要です。ノートブックの処理に従ってください。<br>
+Google Colaboratory起動を行う方は、以下の作業は不要です。ノートブックの処理に従ってください。<br>
 また、以下の手順は、Pythonやnode.jsがインストールされている前提です。<br>
 
 ```bash
@@ -146,7 +146,7 @@ cp config.example.json config.json
   cd src/gui/reactflow/frontend
   npm run dev
   ```
-* <b>Google Colaboraotryでの起動</b><br>
+* <b>Google Colaboratoryでの起動</b><br>
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kazuhito00/Qwen3-VL-Colaboratory-Sample/blob/main/Qwen3-VL-Colaboratory-Sample.ipynb)<br>
 Colaboratoryでノートブックを開き、上から順に実行してください。<br>
   最終セルの出力結果に`https://localhost:8000/`と表示されるため、そのリンクをクリックしてください<br><img src="https://github.com/user-attachments/assets/cbfa6eaa-8411-4e56-9940-1fc144c127ba" width="75%">
@@ -219,7 +219,7 @@ ReactFlowフロントエンドを起動せずにコマンドラインでグラ�
 |:--|:--|
 | Image | 静止画像ファイル（jpg, png, bmp, gif）を読み込む |
 | Webcam | Webカメラからリアルタイム映像を取得<br>Colaboratoryバックエンドで利用不可|
-| Webcam (WebSocket) | ブラウザのgetUserMedia() API経由でWebカメラ映像を取得<br>Colaboratoryバックエンドで利用可| |
+| Webcam (WebSocket) | ブラウザのgetUserMedia() API経由でWebカメラ映像を取得<br>Colaboratoryバックエンドで利用可 |
 | Video | 動画ファイル（mp4, avi）を読み込んでフレーム再生<br>・Realtime Syncチェックボックス：処理時間に同期してフレームを読み出すオプション<br>・Frame Step：読み込みフレーム間隔（realtime_sync=false時のみ）<br>・Preload All Frameチェックボックス：全フレームをプリロードする<br>※サイドバーの「Loop Playback」がONの場合、ループ再生を行う |
 | Video Frame | 動画の指定フレーム位置の画像を出力 |
 | RTSP | ネットワークカメラのRTSP入力から映像を取得 |
@@ -236,7 +236,7 @@ ReactFlowフロントエンドを起動せずにコマンドラインでグラ�
 | Crop | 正規化座標（0.0-1.0）で指定した領域を切り抜く<br>画像エリアをドラッグして領域を指定可能 |
 | Flip | 画像を水平/垂直方向に反転する |
 | Resize | 指定解像度・補間方法でリサイズする |
-| Rotate ()() 指定角度で画像を回転（90度の倍数以外では余白が発生）|
+| Rotate | 指定角度で画像を回転する（90度の倍数以外では余白が発生） |
 | 3D Rotate | 3次元空間でのピッチ・ヨー・ロール回転を行う |
 | Click Perspective | 画像クリックでの4点指定による透視変換を行う |
 
@@ -285,8 +285,8 @@ ReactFlowフロントエンドを起動せずにコマンドラインでグラ�
 | ノード名 | 説明 |
 |:--|:--|
 | Image Classification | ImageNet 1000クラスで画像を分類する<br>・Model：使用するモデルを選択する（ドロップダウン）|
-| Object Detection | 物体検出を行う<br>motpyよるマルチオブジェクトトラッキング、SAHIによるスライス処理検出にも対応 |
-| Face Detection | 顔検出を行う<br>motpyよるマルチオブジェクトトラッキング、SAHIによるスライス処理検出にも対応 |
+| Object Detection | 物体検出を行う<br>motpyによるマルチオブジェクトトラッキング、SAHIによるスライス処理検出にも対応 |
+| Face Detection | 顔検出を行う<br>motpyによるマルチオブジェクトトラッキング、SAHIによるスライス処理検出にも対応 |
 | Low-Light Image Enhancement | 暗所画像の画像強調を行う |
 | Depth Estimation | 単眼深度推定を行う |
 | Pose Estimation | 人体姿勢推定を行う |
@@ -434,7 +434,7 @@ ReactFlowフロントエンドを起動せずにコマンドラインでグラ�
 
 | ノード名 | 説明 |
 |:--|:--|
-| Speaker | スピーカーから音声を再生する< |
+| Speaker | スピーカーから音声を再生する |
 | Speaker (Browser) | ブラウザのWeb Audio APIで音声を再生する |
 | Write WAV | 入力音声をWAVファイルとして記録する（STOP時に保存） |
 
@@ -506,7 +506,7 @@ ReactFlowフロントエンドを起動せずにコマンドラインでグラ�
 |:--|:--|
 | Int | 整数値を出力 |
 | Float | 浮動小数点値を出力 |
-| Clamp | 値を指定範囲内に制限< |
+| Clamp | 値を指定範囲内に制限する |
 | Float2Int | 浮動小数点を整数に変換 |
 
 </details>
