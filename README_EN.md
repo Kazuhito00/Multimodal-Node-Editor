@@ -13,7 +13,7 @@ Process images, audio, text, and more by connecting nodes - designed for experim
 - Easy node creation with TOML + Python (no custom GUI required)
 - Headless execution of saved graphs without GUI
 - Google Colaboratory backend support<br>
-  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kazuhito00/Qwen3-VL-Colaboratory-Sample/blob/main/Qwen3-VL-Colaboratory-Sample.ipynb)
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kazuhito00/Multimodal-Node-Editor/blob/main/run_gui_reactflow_colab.ipynb)
 
 # Note
 Nodes are added as the author (Takahashi) needs them,<br>
@@ -146,7 +146,7 @@ Set the following keys in `config.json` as needed.
   npm run dev
   ```
 * <b>Google Colaboratory</b><br>
-  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kazuhito00/Qwen3-VL-Colaboratory-Sample/blob/main/Qwen3-VL-Colaboratory-Sample.ipynb)<br>
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kazuhito00/Multimodal-Node-Editor/blob/main/run_gui_reactflow_colab.ipynb)<br>
   Open the notebook in Colaboratory and run cells from top to bottom.<br>
   Click the `https://localhost:8000/` link shown in the final cell output<br><img src="https://github.com/user-attachments/assets/cbfa6eaa-8411-4e56-9940-1fc144c127ba" width="75%">
 
