@@ -13,7 +13,7 @@
 - TOML + Python による新規ノードの簡単な追加が可能（GUI を自作しない場合）
 - 保存したグラフを GUI なしでヘッドレス実行可能
 - Google Colaboratory バックエンドでのシステム起動可能<br>
-  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kazuhito00/Qwen3-VL-Colaboratory-Sample/blob/main/Qwen3-VL-Colaboratory-Sample.ipynb)
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kazuhito00/Multimodal-Node-Editor/blob/main/run_gui_reactflow_colab.ipynb)
   
 # Note
 ノードは作成者(高橋)が必要になった順に追加しているため、<br>
@@ -145,8 +145,8 @@ cp config.example.json config.json
   cd src/gui/reactflow/frontend
   npm run dev
   ```
-* <b>Google Colaboratoryでの起動</b><br>
-  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kazuhito00/Qwen3-VL-Colaboratory-Sample/blob/main/Qwen3-VL-Colaboratory-Sample.ipynb)<br>
+* <b>Google Colaboratoryでの起動</b><br>  
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kazuhito00/Multimodal-Node-Editor/blob/main/run_gui_reactflow_colab.ipynb)<br>
 Colaboratoryでノートブックを開き、上から順に実行してください。<br>
   最終セルの出力結果に`https://localhost:8000/`と表示されるため、そのリンクをクリックしてください<br><img src="https://github.com/user-attachments/assets/cbfa6eaa-8411-4e56-9940-1fc144c127ba" width="75%">
 
