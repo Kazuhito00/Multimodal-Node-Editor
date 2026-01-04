@@ -148,7 +148,7 @@ cp config.example.json config.json
 * <b>Google Colaboratoryでの起動</b><br>  
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kazuhito00/Multimodal-Node-Editor/blob/main/run_gui_reactflow_colab.ipynb)<br>
 Colaboratoryでノートブックを開き、上から順に実行してください。<br>
-  最終セルの出力結果に`https://localhost:8000/`と表示されるため、そのリンクをクリックしてください<br><img src="https://github.com/user-attachments/assets/cbfa6eaa-8411-4e56-9940-1fc144c127ba" width="75%">
+  最終セルの出力結果に`https://localhost:8000/`と表示されるため、そのリンクをクリックしてください<br><img src="https://github.com/user-attachments/assets/04313de9-535e-48cc-a605-2551eda35e16" width="75%">
 
 * <b>ヘッドレス実行</b><br>
 ReactFlowフロントエンドを起動せずにコマンドラインでグラフ実行が可能です<br>
