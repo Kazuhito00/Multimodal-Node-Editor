@@ -586,9 +586,9 @@ Below is an example of the Image/Filter/Canny node structure.
 ```bash
 src/nodes/
   image/
-    category.toml             # Category settings
+    category.toml         # Category settings
     filter/
-      category.toml         # Subcategory settings
+      category.toml       # Subcategory settings
       canny/
         node.toml         # Node metadata
         impl.py           # Implementation
