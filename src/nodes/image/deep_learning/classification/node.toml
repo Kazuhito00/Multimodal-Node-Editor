@@ -1,6 +1,6 @@
 name = "image.deep_learning.classification"
 version = "1.0.0"
-display_name = "Classification"
+display_name = "Image Classification"
 description = "Classify images using deep learning models (ImageNet 1000 classes)"
 order = 5
 gui = ["reactflow", "headless"]
