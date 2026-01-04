@@ -551,25 +551,25 @@ Set the following keys in `config.json` as needed.
 # Directory Structure
 ```
 src/
-  node_editor/              # Core library
-    core.py               # Graph execution engine
-    models.py             # Data models (Node, Port, Connection)
-    node_def.py           # Node definition system
-    commands.py           # Undo/Redo
-    settings.py           # Settings management
-    image_utils.py        # Image utilities
-  nodes/                    # Node implementations
-    image/                # Image nodes
-    audio/                # Audio nodes
-    math/                 # Math operation nodes
-    text/                 # Text nodes
-    openai/               # OpenAI integration nodes
-    utility/              # Utility nodes
+  node_editor/                # Core library
+    core.py                   # Graph execution engine
+    models.py                 # Data models (Node, Port, Connection)
+    node_def.py               # Node definition system
+    commands.py               # Undo/Redo
+    settings.py               # Settings management
+    image_utils.py            # Image utilities
+  nodes/                      # Node implementations
+    image/                    # Image nodes
+    audio/                    # Audio nodes
+    math/                     # Math operation nodes
+    text/                     # Text nodes
+    openai/                   # OpenAI integration nodes
+    utility/                  # Utility nodes
   gui/
-    reactflow/            # ReactFlow
-      backend/          # FastAPI backend
-      frontend/         # React frontend
-    headless/             # Headless execution
+    reactflow/                # ReactFlow
+      backend/                # FastAPI backend
+      frontend/               # React frontend
+    headless/                 # Headless execution
 config.example.json           # Application settings
 download_weights.py           # Model download script
 run_gui_reactflow.py          # GUI launch script
