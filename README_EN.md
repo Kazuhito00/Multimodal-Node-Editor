@@ -148,7 +148,7 @@ Set the following keys in `config.json` as needed.
 * <b>Google Colaboratory</b><br>
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kazuhito00/Multimodal-Node-Editor/blob/main/run_gui_reactflow_colab.ipynb)<br>
   Open the notebook in Colaboratory and run cells from top to bottom.<br>
-  Click the `https://localhost:8000/` link shown in the final cell output<br><img src="https://github.com/user-attachments/assets/cbfa6eaa-8411-4e56-9940-1fc144c127ba" width="75%">
+  Click the `https://localhost:8000/` link shown in the final cell output<br><img src="https://github.com/user-attachments/assets/04313de9-535e-48cc-a605-2551eda35e16" width="75%">
 
 * <b>Headless Execution</b><br>
   Execute graphs from command line without ReactFlow frontend<br>
