@@ -137,6 +137,7 @@ cp config.example.json config.json
   |-----------|------|
   | `--config <path>` | 設定ファイルのパス（デフォルト: config.json） |
   <br>
+  
   または、以下をそれぞれ別コンソールにて実行し、ブラウザにて`http://localhost:5173/`にアクセスしてください。<br>
   
   ```
