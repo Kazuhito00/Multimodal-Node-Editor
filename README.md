@@ -971,7 +971,7 @@ class BlurNodeLogic(ComputeLogic):
 </details>
 
 # Author
-高橋かずひと(https://twitter.com/KzhtTkhs)
+高橋かずひと(https://x.com/KzhtTkhs)
  
 # License 
 Multimodal-Node-Editor is under [Apache-2.0 license](LICENSE).<br>
