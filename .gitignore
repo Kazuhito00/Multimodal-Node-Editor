@@ -218,6 +218,9 @@ temp/*
 # config.json
 config.json
 
+# xxxxxxxx
+src/nodes/xxxxxxxx
+
 # _model
 _model/*
 *.onnx
