@@ -64,6 +64,7 @@ av                  16.0.1    or later
 openai              2.14.0    or later
 aiortc              1.14.0    or later
 websocket-client    1.9.0     or later
+vosk                0.3.45    or later
 google-cloud-speech 2.35.0    or later
 ```
 </details>
@@ -403,6 +404,7 @@ ReactFlowフロントエンドを起動せずにコマンドラインでグラ�
 | ノード名 | 説明 |
 |:--|:--|
 | Google STT | Google Cloud Speech-to-Text APIでストリーミング音声認識を行う<br>※コンフィグの api_keys.google_stt にGoogleクレデンシャルjsonを指定している場合のみ有効 |
+| Vosk STT | Vosk APIでストリーミング音声認識を行う |
 
 </details>
 

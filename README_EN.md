@@ -64,6 +64,7 @@ av                  16.0.1    or later
 openai              2.14.0    or later
 aiortc              1.14.0    or later
 websocket-client    1.9.0     or later
+vosk                0.3.45    or later
 google-cloud-speech 2.35.0    or later
 ```
 </details>
@@ -401,6 +402,7 @@ Set the following keys in `config.json` as needed.
 | Node Name | Description |
 |:--|:--|
 | Google STT | Perform streaming speech recognition with Google Cloud Speech-to-Text API<br>*Only works when api_keys.google_stt is set in config |
+| Vosk STT | Perform streaming speech recognition with Vosk API |
 
 </details>
 
