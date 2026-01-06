@@ -4,6 +4,7 @@ display_name = "Google STT"
 description = "Speech-to-Text using Google Cloud Speech-to-Text API"
 order = 10
 gui = ["reactflow", "headless"]
+requires_config = "api_keys.google_stt"
 
 [[ports]]
 name = "audio"

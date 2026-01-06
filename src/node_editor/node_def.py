@@ -404,6 +404,15 @@ def discover_nodes(
                 print(f"Skipping node (colab=false): {node_toml_file}")
                 continue
 
+            # ノードレベルのrequires_configチェック（設定が未設定の場合はスキップ）
+            node_requires_config = node_config.get("requires_config", None)
+            if node_requires_config:
+                from .settings import get_setting
+                config_value = get_setting(node_requires_config, "")
+                if not config_value:
+                    print(f"Skipping node (requires_config={node_requires_config} not set): {node_toml_file}")
+                    continue
+
             # プラットフォームチェック（platform指定がある場合、現在のプラットフォームが含まれているか）
             platform_list = node_config.get("platform", None)
             if platform_list is not None:
