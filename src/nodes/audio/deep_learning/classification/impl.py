@@ -134,7 +134,7 @@ class AudioClassificationLogic(ComputeLogic):
 
         # モデルパスを設定
         current_dir = Path(__file__).parent
-        self._yamnet_model_path = str(current_dir / "model" / "yamnet_float32.tflite")
+        self._yamnet_model_path = str(current_dir / "yamnet" / "model" / "yamnet_float32.tflite")
 
     def reset(self):
         """バッファをリセット"""

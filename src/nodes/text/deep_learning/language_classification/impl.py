@@ -46,7 +46,7 @@ class LanguageClassificationLogic(ComputeLogic):
         split_name = model_name.split(".")
         model_name = f"{split_name[0]}_{quantize_type}.{split_name[1]}"
 
-        return os.path.join(base_path, "model", model_name)
+        return os.path.join(base_path, "mediapipe_language_detector", "model", model_name)
 
     def _download_model(self, model_index: int) -> Optional[str]:
         """モデルをダウンロード"""

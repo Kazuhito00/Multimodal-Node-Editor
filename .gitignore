@@ -228,3 +228,5 @@ _model/*
 *.task
 *.pth
 *.pt
+
+src/nodes/audio/recognition/vosk/model

@@ -1,5 +1,5 @@
 name = "text.deep_learning.language_classification"
-version = "1.0.0"
+version = "1.0.1"
 display_name = "Language Classification"
 description = "Classify the language of input text using deep learning models"
 order = 10

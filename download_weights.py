@@ -15,6 +15,7 @@ import argparse
 import sys
 import urllib.request
 import urllib.error
+import zipfile
 from pathlib import Path
 
 
@@ -28,7 +29,12 @@ MODEL_FILES = [
     ("v0.0.0", "MobileNetV3Large.onnx", "src/nodes/image/deep_learning/classification/MobileNetV3/model/MobileNetV3Large.onnx"),
     ("v0.0.0", "MobileNetV3Small.onnx", "src/nodes/image/deep_learning/classification/MobileNetV3/model/MobileNetV3Small.onnx"),
     ("v0.0.0", "silero_vad_v5.onnx", "src/nodes/audio/analysis/voice_activity_detection/model/silero_vad_v5.onnx"),
-    ("v0.0.0", "gtcrn_simple.onnx", "src/nodes/audio/deep_learning/speech_enhancement/model/gtcrn_simple.onnx"),
+    ("v0.0.0", "gtcrn_simple.onnx", "src/nodes/audio/deep_learning/speech_enhancement/gtcrn/model/gtcrn_simple.onnx"),
+    ("v1.1.0", "fastenhancer_t.onnx", "src/nodes/audio/deep_learning/speech_enhancement/fastenhancer/model/fastenhancer_t.onnx"),
+    ("v1.1.0", "fastenhancer_s.onnx", "src/nodes/audio/deep_learning/speech_enhancement/fastenhancer/model/fastenhancer_s.onnx"),
+    ("v1.1.0", "fastenhancer_m.onnx", "src/nodes/audio/deep_learning/speech_enhancement/fastenhancer/model/fastenhancer_m.onnx"),
+    ("v1.1.0", "fastenhancer_b.onnx", "src/nodes/audio/deep_learning/speech_enhancement/fastenhancer/model/fastenhancer_b.onnx"),
+    ("v1.1.0", "fastenhancer_l.onnx", "src/nodes/audio/deep_learning/speech_enhancement/fastenhancer/model/fastenhancer_l.onnx"),
     ("v0.0.0", "silero_vad_v6.onnx", "src/nodes/audio/analysis/voice_activity_detection/model/silero_vad_v6.onnx"),
     ("v0.0.0", "deimv2_dinov3_s_coco.onnx", "src/nodes/image/deep_learning/object_detection/DEIMv2/model/deimv2_dinov3_s_coco.onnx"),
     ("v0.0.0", "deimv2_hgnetv2_atto_coco.onnx", "src/nodes/image/deep_learning/object_detection/DEIMv2/model/deimv2_hgnetv2_atto_coco.onnx"),
@@ -72,8 +78,8 @@ MODEL_FILES = [
     ("v0.0.0", "selfie_segmenter_landscape_float16.tflite", "src/nodes/image/deep_learning/semantic_segmentation/MediaPipe/model/selfie_segmenter_landscape_float16.tflite"),
     ("v0.0.0", "hair_segmenter_float32.tflite", "src/nodes/image/deep_learning/semantic_segmentation/MediaPipe/model/hair_segmenter_float32.tflite"),
     ("v0.0.0", "selfie_multiclass_256x256_float32.tflite", "src/nodes/image/deep_learning/semantic_segmentation/MediaPipe/model/selfie_multiclass_256x256_float32.tflite"),
-    ("v0.0.0", "yamnet_float32.tflite", "src/nodes/audio/deep_learning/classification/model/yamnet_float32.tflite"),
-    ("v0.0.0", "language_detector_float32.tflite", "src/nodes/text/deep_learning/language_classification/model/language_detector_float32.tflite"),
+    ("v0.0.0", "yamnet_float32.tflite", "src/nodes/audio/deep_learning/classification/yamnet/model/yamnet_float32.tflite"),
+    ("v0.0.0", "language_detector_float32.tflite", "src/nodes/text/deep_learning/language_classification/mediapipe_language_detector/model/language_detector_float32.tflite"),
     ("v0.0.0", "face_landmarker_float16.task", "src/nodes/image/deep_learning/face_detection/MediaPipe/model/face_landmarker_float16.task"),
     ("v0.0.0", "pose_landmarker_lite_float16.task", "src/nodes/image/deep_learning/pose_estimation/MediaPipe/model/pose_landmarker_lite_float16.task"),
     ("v0.0.0", "pose_landmarker_full_float16.task", "src/nodes/image/deep_learning/pose_estimation/MediaPipe/model/pose_landmarker_full_float16.task"),
@@ -83,6 +89,15 @@ MODEL_FILES = [
     ("v0.0.0", "PP-OCRv5_mobile_rec_infer.onnx", "src/nodes/image/deep_learning/ocr/PaddleOCRv5/model/PP-OCRv5_mobile_rec_infer.onnx"),
     ("v0.0.0", "PP-OCRv5_server_det_infer.onnx", "src/nodes/image/deep_learning/ocr/PaddleOCRv5/model/PP-OCRv5_server_det_infer.onnx"),
     ("v0.0.0", "PP-OCRv5_server_rec_infer.onnx", "src/nodes/image/deep_learning/ocr/PaddleOCRv5/model/PP-OCRv5_server_rec_infer.onnx"),
+]
+
+# ZIPファイルのダウンロード対象（ダウンロード後に解凍）
+# 形式: (バージョン, ファイル名, 格納先ディレクトリ相対パス, 解凍後のディレクトリ名)
+ZIP_FILES = [
+    ("v1.1.0", "vosk-model-small-ja-0.22.zip", "src/nodes/audio/recognition/vosk/model", "vosk-model-small-ja-0.22"),
+    ("v1.1.0", "vosk-model-ja-0.22.zip", "src/nodes/audio/recognition/vosk/model", "vosk-model-ja-0.22"),
+    ("v1.1.0", "vosk-model-small-en-us-0.15.zip", "src/nodes/audio/recognition/vosk/model", "vosk-model-small-en-us-0.15"),
+    ("v1.1.0", "vosk-model-en-us-0.22.zip", "src/nodes/audio/recognition/vosk/model", "vosk-model-en-us-0.22"),
 ]
 
 
@@ -155,6 +170,18 @@ def download_file_with_progress(
         return False, str(e), 0
 
 
+def extract_zip(zip_path: Path, extract_dir: Path) -> tuple[bool, str]:
+    """ZIPファイルを解凍"""
+    try:
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            zip_ref.extractall(extract_dir)
+        return True, ""
+    except zipfile.BadZipFile:
+        return False, "Invalid ZIP file"
+    except Exception as e:
+        return False, str(e)
+
+
 def parse_arguments() -> argparse.Namespace:
     """コマンドライン引数をパース"""
     parser = argparse.ArgumentParser(
@@ -186,22 +213,29 @@ def main():
     project_root = Path(__file__).resolve().parent
 
     total_files = len(MODEL_FILES)
+    total_zips = len(ZIP_FILES)
     success_count = 0
     skipped_exists_count = 0
     skipped_size_count = 0
     failed_files = []
+
+    # ZIPファイル用カウンタ
+    zip_success_count = 0
+    zip_skipped_count = 0
+    zip_failed_files = []
 
     print("=" * 60)
     print("Model Weights Downloader")
     print("=" * 60)
     print(f"Source: {GITHUB_RELEASE_BASE}")
     print(f"Target: {project_root}")
-    print(f"Total files: {total_files}")
+    print(f"Total files: {total_files} (+ {total_zips} ZIP archives)")
     print(f"Force overwrite: {force_overwrite}")
     print(f"Max file size: {f'{max_size_mb} MB' if max_size_mb else 'unlimited'}")
     print("=" * 60)
     print()
 
+    # 通常ファイルのダウンロード
     for i, (version, filename, dest_rel_path) in enumerate(MODEL_FILES, 1):
         url = f"{GITHUB_RELEASE_BASE}/{version}/{filename}"
         dest_path = project_root / dest_rel_path
@@ -235,6 +269,62 @@ def main():
             line = f"\r({i}/{total_files}) NG: {filename} - {error_msg}"
             print(f"{line:<80}")
 
+    # ZIPファイルのダウンロードと解凍
+    if total_zips > 0:
+        print()
+        print("-" * 60)
+        print("ZIP Archives (download and extract)")
+        print("-" * 60)
+        print()
+
+        for i, (version, filename, dest_dir_rel, extract_dirname) in enumerate(ZIP_FILES, 1):
+            url = f"{GITHUB_RELEASE_BASE}/{version}/{filename}"
+            dest_dir = project_root / dest_dir_rel
+            extract_path = dest_dir / extract_dirname
+
+            # 解凍済みディレクトリが存在する場合はスキップ
+            if extract_path.exists() and not force_overwrite:
+                zip_skipped_count += 1
+                print(f"[ZIP {i}/{total_zips}] SKIP: {filename} - already extracted")
+                continue
+
+            # ファイルサイズによるスキップ判定
+            if max_size_bytes:
+                remote_size = get_remote_file_size(url)
+                if remote_size > max_size_bytes:
+                    zip_skipped_count += 1
+                    print(f"[ZIP {i}/{total_zips}] SKIP: {filename} ({format_size(remote_size)}) - exceeds max size")
+                    continue
+
+            # ZIPファイルをダウンロード
+            zip_path = dest_dir / filename
+            prefix = f"[ZIP {i}/{total_zips}] {filename}"
+            success, error_msg, file_size = download_file_with_progress(url, zip_path, prefix)
+
+            if not success:
+                zip_failed_files.append((filename, dest_dir_rel, error_msg))
+                line = f"\r[ZIP {i}/{total_zips}] NG: {filename} - {error_msg}"
+                print(f"{line:<80}")
+                continue
+
+            # 解凍
+            print(f"\r[ZIP {i}/{total_zips}] Extracting {filename}...".ljust(80), end="", flush=True)
+            extract_success, extract_error = extract_zip(zip_path, dest_dir)
+
+            if extract_success:
+                zip_success_count += 1
+                line = f"\r[ZIP {i}/{total_zips}] OK: {filename} ({format_size(file_size)}) - extracted"
+                print(f"{line:<80}")
+                # 解凍成功後、ZIPファイルを削除
+                try:
+                    zip_path.unlink()
+                except Exception:
+                    pass
+            else:
+                zip_failed_files.append((filename, dest_dir_rel, f"Extract failed: {extract_error}"))
+                line = f"\r[ZIP {i}/{total_zips}] NG: {filename} - {extract_error}"
+                print(f"{line:<80}")
+
     # 結果サマリー
     skipped_total = skipped_exists_count + skipped_size_count
     print()
@@ -246,6 +336,12 @@ def main():
     print(f"  Skipped (size):   {skipped_size_count}/{total_files}")
     print(f"  Failed:           {len(failed_files)}/{total_files}")
 
+    if total_zips > 0:
+        print()
+        print(f"  ZIP extracted:    {zip_success_count}/{total_zips}")
+        print(f"  ZIP skipped:      {zip_skipped_count}/{total_zips}")
+        print(f"  ZIP failed:       {len(zip_failed_files)}/{total_zips}")
+
     if failed_files:
         print()
         print("[FAILED FILES]")
@@ -254,9 +350,20 @@ def main():
             print(f"    -> {dest_path}")
             print(f"    Error: {error_msg}")
 
+    if zip_failed_files:
+        print()
+        print("[FAILED ZIP FILES]")
+        for filename, dest_path, error_msg in zip_failed_files:
+            print(f"  - {filename}")
+            print(f"    -> {dest_path}")
+            print(f"    Error: {error_msg}")
+
     print()
     completed_count = success_count + skipped_total
-    if completed_count == total_files:
+    zip_completed_count = zip_success_count + zip_skipped_count
+    all_success = (completed_count == total_files) and (zip_completed_count == total_zips)
+
+    if all_success:
         print("All files are ready!")
         return 0
     else:

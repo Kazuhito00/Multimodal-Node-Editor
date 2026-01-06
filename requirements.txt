@@ -17,4 +17,5 @@ av
 openai
 aiortc
 websocket-client
+vosk
 google-cloud-speech

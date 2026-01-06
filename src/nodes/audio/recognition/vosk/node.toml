@@ -1,0 +1,30 @@
+name = "audio.recognition.vosk"
+version = "1.0.0"
+display_name = "Vosk STT"
+description = "Speech-to-Text using Vosk offline speech recognition"
+order = 20
+gui = ["reactflow", "headless"]
+
+[[ports]]
+name = "audio"
+data_type = "audio"
+direction = "in"
+
+[[ports]]
+name = "text"
+data_type = "string"
+direction = "out"
+
+[[properties]]
+name = "model"
+display_name = "Model"
+type = "int"
+default = 0
+widget = "dropdown"
+disabled_while_streaming = true
+options = [
+    { value = 0, label = "Japanese (small-ja-0.22)" },
+    { value = 1, label = "Japanese (ja-0.22)" },
+    { value = 2, label = "English (small-en-us-0.15)" },
+    { value = 3, label = "English (en-us-0.22)" },
+]

@@ -1,5 +1,5 @@
 name = "audio.deep_learning.speech_enhancement"
-version = "1.0.0"
+version = "1.1.0"
 display_name = "Speech Enhancement"
 description = "Enhance speech audio using deep learning models"
 order = 10
@@ -19,4 +19,9 @@ widget = "dropdown"
 disabled_while_streaming = true
 options = [
     { value = 0, label = "GTCRN" },
+    { value = 1, label = "FastEnhancer-T" },
+    { value = 2, label = "FastEnhancer-B" },
+    { value = 3, label = "FastEnhancer-S" },
+    { value = 4, label = "FastEnhancer-M" },
+    { value = 5, label = "FastEnhancer-L" },
 ]
