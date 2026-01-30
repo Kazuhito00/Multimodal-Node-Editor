@@ -20,10 +20,14 @@ except Exception:
     onnxruntime = None
 
 # モデル設定
-MODEL_NAMES = [
-    "PaddleOCRv5(Mobile)",
-    "PaddleOCRv5(Server)",
-]
+MODEL_CONFIGS = {
+    0: {"name": "PaddleOCRv5(Mobile)", "version": "v5", "language": "multilingual"},
+    1: {"name": "PaddleOCRv5(Server)", "version": "v5", "language": "multilingual"},
+    2: {"name": "PaddleOCRv3(Japanese)", "version": "v3", "language": "japanese"},
+    3: {"name": "PaddleOCRv3(English)", "version": "v3", "language": "english"},
+    4: {"name": "PaddleOCRv3(Chinese)", "version": "v3", "language": "chinese"},
+    5: {"name": "PaddleOCRv3(Korean)", "version": "v3", "language": "korean"},
+}
 
 # 検出パラメータ
 DET_LIMIT_SIDE = 960
@@ -455,6 +459,95 @@ class PaddleOCREngine:
         return results
 
 
+class PaddleOCRv3Engine:
+    """PaddleOCR v3 ONNXエンジン"""
+
+    def __init__(
+        self,
+        det_model_path: str,
+        rec_model_path: str,
+        dict_path: str,
+        providers: List[str]
+    ):
+        self.det_session = onnxruntime.InferenceSession(
+            det_model_path, providers=providers
+        )
+        self.rec_session = onnxruntime.InferenceSession(
+            rec_model_path, providers=providers
+        )
+        self.char_dict = load_dict(dict_path)
+
+        # パラメータ設定（v3用）
+        self.det_limit_side_len = 960
+        self.det_limit_type = "max"
+        self.det_db_thresh = 0.3
+        self.det_db_box_thresh = 0.6
+        self.det_db_unclip_ratio = 1.5
+        self.rec_image_shape = [3, 48, 320]
+        self.drop_score = 0.5
+
+    def detect(self, img: np.ndarray) -> Tuple[List[np.ndarray], List[float]]:
+        """テキスト領域を検出"""
+        input_data, shape_info = preprocess_det(
+            img, self.det_limit_side_len, self.det_limit_type
+        )
+
+        input_name = self.det_session.get_inputs()[0].name
+        output = self.det_session.run(None, {input_name: input_data})[0]
+
+        boxes, scores = postprocess_det(
+            output, shape_info, self.det_db_thresh,
+            self.det_db_box_thresh, self.det_db_unclip_ratio
+        )
+
+        return boxes, scores
+
+    def recognize_batch(self, img_list: List[np.ndarray]) -> List[Tuple[str, float]]:
+        """テキストをバッチ認識"""
+        if len(img_list) == 0:
+            return []
+
+        input_data = preprocess_rec_batch(
+            img_list, self.rec_image_shape[1], self.rec_image_shape[2]
+        )
+
+        input_name = self.rec_session.get_inputs()[0].name
+        output = self.rec_session.run(None, {input_name: input_data})[0]
+
+        results = postprocess_rec(output, self.char_dict)
+
+        if len(img_list) == 1 and not isinstance(results, list):
+            return [results]
+        return results
+
+    def ocr(self, img: np.ndarray) -> List[Dict[str, Any]]:
+        """OCR実行（検出 + 認識）"""
+        boxes, det_scores = self.detect(img)
+
+        if len(boxes) == 0:
+            return []
+
+        boxes = sort_boxes(boxes)
+
+        # 画像切り出し
+        img_crop_list = [get_rotate_crop_image(img, box) for box in boxes]
+
+        # テキスト認識
+        rec_results = self.recognize_batch(img_crop_list)
+
+        # スコアフィルタリングと結果生成
+        results = []
+        for box, (text, confidence) in zip(boxes, rec_results):
+            if confidence >= self.drop_score and text:
+                results.append({
+                    "box": box.tolist(),
+                    "text": text,
+                    "confidence": confidence
+                })
+
+        return results
+
+
 def draw_ocr_results(
     image: np.ndarray,
     results: List[Dict[str, Any]]
@@ -551,6 +644,28 @@ class OCRLogic(ComputeLogic):
 
         return det_path, rec_path, dict_path
 
+    def _get_model_paths_v3(self, language: str) -> Tuple[str, str, str]:
+        """v3モデルパスを取得"""
+        base_path = os.path.dirname(os.path.abspath(__file__))
+
+        # 言語別マッピング
+        lang_mapping = {
+            "japanese": ("japan_PP-OCRv3_rec_infer.onnx", "japan_dict.txt"),
+            "english": ("en_PP-OCRv3_rec_infer.onnx", "en_dict.txt"),
+            "chinese": ("ch_PP-OCRv3_rec_infer.onnx", "ppocr_keys_v1.txt"),
+            "korean": ("korean_PP-OCRv3_rec_infer.onnx", "korean_dict.txt"),
+        }
+        rec_model, dict_file = lang_mapping[language]
+
+        # 検出モデル（言語別）
+        det_model = "en_PP-OCRv3_det_infer.onnx" if language == "english" else "ch_PP-OCRv3_det_infer.onnx"
+
+        det_path = os.path.join(base_path, f"PaddleOCRv3/model/det_model/{det_model}")
+        rec_path = os.path.join(base_path, f"PaddleOCRv3/model/rec_model/{rec_model}")
+        dict_path = os.path.join(base_path, f"PaddleOCRv3/ppocr/utils/dict/{dict_file}")
+
+        return det_path, rec_path, dict_path
+
     def _get_providers(self, use_gpu: bool) -> List[str]:
         """使用するプロバイダーリストを取得"""
         if use_gpu and CUDA_AVAILABLE:
@@ -605,6 +720,39 @@ class OCRLogic(ComputeLogic):
             self._model_errors[cache_key] = error_msg
             return None, error_msg
 
+    def _load_model_v3(
+        self,
+        language: str,
+        use_gpu: bool = False
+    ) -> Tuple[Optional[PaddleOCRv3Engine], Optional[str]]:
+        """v3モデルをロード（キャッシュ対応）"""
+        cache_key = f"v3_{language}_gpu={use_gpu and CUDA_AVAILABLE}"
+
+        if cache_key in self._model_cache:
+            return self._model_cache[cache_key], None
+        if cache_key in self._model_errors:
+            return None, self._model_errors[cache_key]
+
+        det_path, rec_path, dict_path = self._get_model_paths_v3(language)
+
+        # ファイル存在確認
+        for path, name in [(det_path, "Detection"), (rec_path, "Recognition"), (dict_path, "Dictionary")]:
+            if not os.path.exists(path):
+                error_msg = f"{name} model not found: {path}"
+                self._model_errors[cache_key] = error_msg
+                return None, error_msg
+
+        providers = self._get_providers(use_gpu)
+
+        try:
+            model = PaddleOCRv3Engine(det_path, rec_path, dict_path, providers)
+            self._model_cache[cache_key] = model
+            return model, None
+        except Exception as e:
+            error_msg = f"Failed to load v3 model: {e}"
+            self._model_errors[cache_key] = error_msg
+            return None, error_msg
+
     def _check_cancel_and_return(self, image: np.ndarray) -> Optional[Dict[str, Any]]:
         """キャンセルされていたら早期リターン用の結果を返す"""
         if self.is_cancelled():
@@ -644,13 +792,21 @@ class OCRLogic(ComputeLogic):
         use_gpu = bool(properties.get("use_gpu", False)) and CUDA_AVAILABLE
         model_index = int(properties.get("model", 0))
 
-        # モデル名取得
-        if model_index < 0 or model_index >= len(MODEL_NAMES):
+        # モデル設定取得
+        if model_index not in MODEL_CONFIGS:
             model_index = 0
-        model_name = MODEL_NAMES[model_index]
+        model_config = MODEL_CONFIGS[model_index]
+        model_name = model_config["name"]
+        model_version = model_config["version"]
+        language = model_config["language"]
 
-        # モデルロード
-        model, load_error = self._load_model(model_name, use_gpu)
+        # バージョン分岐でモデルロード
+        if model_version == "v5":
+            model, load_error = self._load_model(model_name, use_gpu)
+        elif model_version == "v3":
+            model, load_error = self._load_model_v3(language, use_gpu)
+        else:
+            raise RuntimeError(f"Unknown model version: {model_version}")
 
         # エラーの場合
         if model is None:

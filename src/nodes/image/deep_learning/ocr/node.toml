@@ -1,7 +1,7 @@
 name = "image.deep_learning.ocr"
-version = "1.0.0"
+version = "1.1.0"
 display_name = "OCR"
-description = "Optical Character Recognition using PaddleOCR v5"
+description = "Optical Character Recognition using PaddleOCR v3/v5"
 order = 60
 gui = ["reactflow", "headless"]
 measure_time = true
@@ -33,6 +33,10 @@ disabled_while_streaming = true
 options = [
     { value = 0, label = "PaddleOCRv5(Mobile)" },
     { value = 1, label = "PaddleOCRv5(Server)" },
+    { value = 2, label = "PaddleOCRv3(Japanese)" },
+    { value = 3, label = "PaddleOCRv3(English)" },
+    { value = 4, label = "PaddleOCRv3(Chinese)" },
+    { value = 5, label = "PaddleOCRv3(Korean)" },
 ]
 
 [[properties]]

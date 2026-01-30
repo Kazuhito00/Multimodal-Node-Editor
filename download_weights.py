@@ -89,6 +89,12 @@ MODEL_FILES = [
     ("v0.0.0", "PP-OCRv5_mobile_rec_infer.onnx", "src/nodes/image/deep_learning/ocr/PaddleOCRv5/model/PP-OCRv5_mobile_rec_infer.onnx"),
     ("v0.0.0", "PP-OCRv5_server_det_infer.onnx", "src/nodes/image/deep_learning/ocr/PaddleOCRv5/model/PP-OCRv5_server_det_infer.onnx"),
     ("v0.0.0", "PP-OCRv5_server_rec_infer.onnx", "src/nodes/image/deep_learning/ocr/PaddleOCRv5/model/PP-OCRv5_server_rec_infer.onnx"),
+    ("v1.2.0", "ch_PP-OCRv3_det_infer.onnx", "src/nodes/image/deep_learning/ocr/PaddleOCRv3/model/det_model/ch_PP-OCRv3_det_infer.onnx"),
+    ("v1.2.0", "en_PP-OCRv3_det_infer.onnx", "src/nodes/image/deep_learning/ocr/PaddleOCRv3/model/det_model/en_PP-OCRv3_det_infer.onnx"),
+    ("v1.2.0", "ch_PP-OCRv3_rec_infer.onnx", "src/nodes/image/deep_learning/ocr/PaddleOCRv3/model/rec_model/ch_PP-OCRv3_rec_infer.onnx"),
+    ("v1.2.0", "en_PP-OCRv3_rec_infer.onnx", "src/nodes/image/deep_learning/ocr/PaddleOCRv3/model/rec_model/en_PP-OCRv3_rec_infer.onnx"),
+    ("v1.2.0", "japan_PP-OCRv3_rec_infer.onnx", "src/nodes/image/deep_learning/ocr/PaddleOCRv3/model/rec_model/japan_PP-OCRv3_rec_infer.onnx"),
+    ("v1.2.0", "korean_PP-OCRv3_rec_infer.onnx", "src/nodes/image/deep_learning/ocr/PaddleOCRv3/model/rec_model/korean_PP-OCRv3_rec_infer.onnx"),
 ]
 
 # ZIPファイルのダウンロード対象（ダウンロード後に解凍）
