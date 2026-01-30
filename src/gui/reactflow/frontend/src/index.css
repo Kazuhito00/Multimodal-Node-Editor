@@ -1899,6 +1899,37 @@ html, body, #root {
   color: #666;
 }
 
+.loading-progress-bar {
+  width: 300px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  margin-top: 16px;
+  overflow: hidden;
+}
+
+.loading-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0f3460, #e94560);
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+.loading-percentage {
+  margin-top: 8px;
+  color: #888;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.loading-overlay.light .loading-progress-bar {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.loading-overlay.light .loading-percentage {
+  color: #666;
+}
+
 /* ブラウザWebカメラ */
 .browser-webcam-container {
   position: relative;

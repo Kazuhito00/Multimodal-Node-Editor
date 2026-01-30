@@ -200,6 +200,70 @@ _category_registry: Dict[str, CategoryDefinition] = {}
 # requires_configでスキップされたカテゴリのセット
 _skipped_categories: set = set()
 
+# ノード登録進捗管理
+_loading_progress = {
+    "stage": "idle",  # idle, nodes, categories, complete
+    "current": 0,
+    "total": 0,
+    "percentage": 0
+}
+_loading_lock = threading.Lock()
+_nodes_initialized = False  # ノード登録済みフラグ
+_registration_thread = None  # ノード登録スレッド
+
+def get_loading_progress() -> Dict[str, Any]:
+    """現在のノード登録進捗を取得"""
+    with _loading_lock:
+        return _loading_progress.copy()
+
+def _register_nodes_background(node_search_paths: List):
+    """バックグラウンドでノード登録を実行"""
+    from pathlib import Path
+    for path_str in node_search_paths:
+        path = Path(path_str)
+        # 相対パスの場合はプロジェクトルートからの相対パスとして解決
+        if not path.is_absolute():
+            # プロジェクトルートを取得（このファイルから3階層上）
+            project_root = Path(__file__).resolve().parent.parent.parent
+            path = project_root / path
+        if path.exists():
+            discover_nodes(path)
+            print(f"Discovered nodes from: {path}")
+        else:
+            print(f"Warning: node_search_path not found: {path}")
+
+    print(f"Discovered {len(_node_definition_registry)} node definitions.")
+
+def initialize_nodes_lazy(node_search_paths: List):
+    """遅延初期化: 初回呼び出し時のみノード登録を別スレッドで開始（スレッドセーフ）"""
+    global _nodes_initialized, _registration_thread
+
+    with _loading_lock:
+        if _nodes_initialized:
+            return
+        _nodes_initialized = True
+
+    # ノード登録を別スレッドで実行（ブロッキングを避ける）
+    _registration_thread = threading.Thread(target=_register_nodes_background, args=(node_search_paths,), daemon=False)
+    _registration_thread.start()
+
+def wait_for_nodes_ready():
+    """ノード登録の完了を待つ"""
+    global _registration_thread
+    if _registration_thread is not None and _registration_thread.is_alive():
+        _registration_thread.join()  # 登録完了まで待つ
+
+def _update_loading_progress(stage: str, current: int, total: int):
+    """ノード登録進捗を更新"""
+    with _loading_lock:
+        _loading_progress["stage"] = stage
+        _loading_progress["current"] = current
+        _loading_progress["total"] = total
+        if total > 0:
+            _loading_progress["percentage"] = int((current / total) * 100)
+        else:
+            _loading_progress["percentage"] = 0
+
 def register_node(node_def_instance: NodeDefinition):
     """ノード定義のインスタンスをレジストリに登録します。"""
     key = (node_def_instance.definition_id, node_def_instance.version)
@@ -291,7 +355,14 @@ def discover_categories(base_path: Path):
     # スキップされたカテゴリをクリア
     _skipped_categories.clear()
 
-    for category_toml_file in base_path.glob("**/category.toml"):
+    category_toml_files = list(base_path.glob("**/category.toml"))
+    total_categories = len(category_toml_files)
+    processed_categories = 0
+
+    # 進捗を初期化（カテゴリは80-100%）
+    _update_loading_progress("categories", 0, total_categories)
+
+    for category_toml_file in category_toml_files:
         try:
             with category_toml_file.open("rb") as f:
                 config = tomllib.load(f)
@@ -319,8 +390,14 @@ def discover_categories(base_path: Path):
             _category_registry[category_id] = category_def
             print(f"Registered category: {category_id}")
 
+            # 進捗を更新
+            processed_categories += 1
+            _update_loading_progress("categories", processed_categories, total_categories)
+
         except Exception as e:
             print(f"Error processing category from {category_toml_file}: {e}")
+            processed_categories += 1
+            _update_loading_progress("categories", processed_categories, total_categories)
 
 
 def get_all_categories() -> List[CategoryDefinition]:
@@ -346,6 +423,11 @@ def discover_nodes(
         discover_categories(base_path)
 
     found_toml_files = list(base_path.glob("**/node.toml"))
+    total_nodes = len(found_toml_files)
+    processed_nodes = 0
+
+    # 進捗を初期化
+    _update_loading_progress("nodes", 0, total_nodes)
 
     for node_toml_file in found_toml_files:
         try:
@@ -515,5 +597,11 @@ def discover_nodes(
             register_node(node_def_instance)
             print(f"Registered node: {node_def_instance.definition_id} v{node_def_instance.version}")
 
+            # 進捗を更新
+            processed_nodes += 1
+            _update_loading_progress("nodes", processed_nodes, total_nodes)
+
         except Exception as e:
             print(f"Error processing node definition from {node_toml_file}: {e}")
+            processed_nodes += 1
+            _update_loading_progress("nodes", processed_nodes, total_nodes)

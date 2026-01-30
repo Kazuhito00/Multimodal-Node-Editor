@@ -85,6 +85,8 @@ function AppContent() {
   const [loopPlayback, setLoopPlayback] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState(true);
   const isLoadingRef = useRef(true);
+  const [loadingStage, setLoadingStage] = useState<string>('Initializing');
+  const [loadingProgress, setLoadingProgress] = useState<number>(0);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [showEditSection, setShowEditSection] = useState(true);
   const [showFileSection, setShowFileSection] = useState(true);
@@ -379,59 +381,86 @@ function AppContent() {
     const maxRetries = 5;
     const retryDelay = 500;
 
-    const fetchAppData = (base: string) => {
-      Promise.all([
-        fetch(`${base}/nodes/definitions`).then((res) => res.json()),
-        fetch(`${base}/nodes/categories`).then((res) => res.json()),
-        fetch(`${base}/settings/theme`).then((res) => res.json()),
-        fetch(`${base}/settings/graph`).then((res) => res.json()),
-        fetch(`${base}/settings/sidebar`).then((res) => res.json()),
-        fetch(`${base}/settings/auto_download`).then((res) => res.json()),
-        fetch(`${base}/settings/api_keys_status`).then((res) => res.json()),
-      ])
-        .then(([defs, cats, themeData, graphSettings, sidebarSettings, autoDownloadSettings, apiKeysStatus]: [
-          NodeDefinition[],
-          CategoryDefinition[],
-          { theme: string },
-          { interval_ms: number },
-          { show_edit: boolean; show_file: boolean; show_auto_layout: boolean },
-          { video: boolean; wav: boolean; capture: boolean; text: boolean },
-          Record<string, boolean>
-        ]) => {
-          // ノード定義が空の場合はリトライ
-          if ((!defs || defs.length === 0) && retryCount < maxRetries) {
-            retryCount++;
-            console.log(`Definitions empty, retrying... (${retryCount}/${maxRetries})`);
-            setTimeout(() => fetchAppData(base), retryDelay);
-            return;
+    const fetchAppData = async (base: string) => {
+      try {
+        // 進捗をポーリングするインターバルを開始
+        const progressInterval = setInterval(async () => {
+          try {
+            const progress = await fetch(`${base}/nodes/loading_progress`).then((res) => res.json());
+            if (progress.stage === 'categories') {
+              // カテゴリ登録: 0-20%
+              const catProgress = Math.floor((progress.current / progress.total) * 20);
+              setLoadingProgress(catProgress);
+              setLoadingStage(`Registering categories (${progress.current}/${progress.total})`);
+            } else if (progress.stage === 'nodes') {
+              // ノード登録: 20-100%
+              const nodeProgress = 20 + Math.floor((progress.current / progress.total) * 80);
+              setLoadingProgress(nodeProgress);
+              setLoadingStage(`Registering nodes (${progress.current}/${progress.total})`);
+            }
+          } catch (e) {
+            // ポーリングエラーは無視
           }
+        }, 100); // 100msごとにポーリング
 
-          setDefinitions(defs || []);
-          setCategories(cats || []);
-          setTheme(themeData.theme === 'light' ? 'light' : 'dark');
-          setIntervalMs(graphSettings.interval_ms);
-          setShowEditSection(sidebarSettings.show_edit);
-          setShowFileSection(sidebarSettings.show_file);
-          setShowAutoLayoutSection(sidebarSettings.show_auto_layout);
-          autoDownloadVideoRef.current = autoDownloadSettings.video;
-          autoDownloadWavRef.current = autoDownloadSettings.wav;
-          autoDownloadCapturesRef.current = autoDownloadSettings.capture;
-          autoDownloadTextRef.current = autoDownloadSettings.text;
-          apiKeysStatusRef.current = apiKeysStatus || {};
+        // Step 1: ノード定義の取得（バックエンドで登録処理が行われる）
+        setLoadingStage('Initializing...');
+        setLoadingProgress(0);
+
+        const defs = await fetch(`${base}/nodes/definitions`).then((res) => res.json());
+
+        // ポーリングを停止
+        clearInterval(progressInterval);
+
+        // ノード定義が空の場合はリトライ
+        if ((!defs || defs.length === 0) && retryCount < maxRetries) {
+          retryCount++;
+          console.log(`Definitions empty, retrying... (${retryCount}/${maxRetries})`);
+          setTimeout(() => fetchAppData(base), retryDelay);
+          return;
+        }
+
+        // Step 2: カテゴリの取得
+        setLoadingStage('Loading data...');
+        setLoadingProgress(100);
+        const cats = await fetch(`${base}/nodes/categories`).then((res) => res.json());
+
+        // その他の設定を一括取得（進捗表示なし）
+        const [themeData, graphSettings, sidebarSettings, autoDownloadSettings, apiKeysStatus] = await Promise.all([
+          fetch(`${base}/settings/theme`).then((res) => res.json()),
+          fetch(`${base}/settings/graph`).then((res) => res.json()),
+          fetch(`${base}/settings/sidebar`).then((res) => res.json()),
+          fetch(`${base}/settings/auto_download`).then((res) => res.json()),
+          fetch(`${base}/settings/api_keys_status`).then((res) => res.json()),
+        ]);
+
+        // 設定を適用
+        setDefinitions(defs || []);
+        setCategories(cats || []);
+        setTheme(themeData.theme === 'light' ? 'light' : 'dark');
+        setIntervalMs(graphSettings.interval_ms);
+        setShowEditSection(sidebarSettings.show_edit);
+        setShowFileSection(sidebarSettings.show_file);
+        setShowAutoLayoutSection(sidebarSettings.show_auto_layout);
+        autoDownloadVideoRef.current = autoDownloadSettings.video;
+        autoDownloadWavRef.current = autoDownloadSettings.wav;
+        autoDownloadCapturesRef.current = autoDownloadSettings.capture;
+        autoDownloadTextRef.current = autoDownloadSettings.text;
+        apiKeysStatusRef.current = apiKeysStatus || {};
+
+        isLoadingRef.current = false;
+        setIsLoading(false);
+      } catch (err) {
+        console.error('Failed to fetch definitions:', err);
+        if (retryCount < maxRetries) {
+          retryCount++;
+          console.log(`Fetch failed, retrying... (${retryCount}/${maxRetries})`);
+          setTimeout(() => fetchAppData(base), retryDelay);
+        } else {
           isLoadingRef.current = false;
           setIsLoading(false);
-        })
-        .catch((err) => {
-          console.error('Failed to fetch definitions:', err);
-          if (retryCount < maxRetries) {
-            retryCount++;
-            console.log(`Fetch failed, retrying... (${retryCount}/${maxRetries})`);
-            setTimeout(() => fetchAppData(base), retryDelay);
-          } else {
-            isLoadingRef.current = false;
-            setIsLoading(false);
-          }
-        });
+        }
+      }
     };
 
     // まずruntimeを取得してAPI/WS URLを決定
@@ -1775,7 +1804,14 @@ function AppContent() {
       {isLoading && (
         <div className={`loading-overlay ${theme}`}>
           <div className="loading-spinner"></div>
-          <div className="loading-text">Loading...</div>
+          <div className="loading-text">{loadingStage}</div>
+          <div className="loading-progress-bar">
+            <div
+              className="loading-progress-fill"
+              style={{ width: `${loadingProgress}%` }}
+            ></div>
+          </div>
+          <div className="loading-percentage">{loadingProgress}%</div>
         </div>
       )}
 

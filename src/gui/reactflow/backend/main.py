@@ -225,20 +225,7 @@ if not is_colab():
         allow_headers=["*"],
     )
 
-# ノード定義を検出・登録（config.jsonのnode_search_pathsから読み込み）
-node_search_paths = settings_manager.get("node_search_paths", [])
-for path_str in node_search_paths:
-    path = Path(path_str)
-    # 相対パスの場合はプロジェクトルートからの相対パスとして解決
-    if not path.is_absolute():
-        path = project_root / path
-    if path.exists():
-        discover_nodes(path)
-        print(f"Discovered nodes from: {path}")
-    else:
-        print(f"Warning: node_search_path not found: {path}")
-
-print(f"Discovered {len(node_def._node_definition_registry)} node definitions.")
+# ノード定義は初回API呼び出し時に遅延初期化される
 
 
 def scan_available_cameras(max_cameras: int = 2) -> List[Dict[str, Any]]:
@@ -826,9 +813,23 @@ async def download_file(path: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.get("/api/nodes/loading_progress")
+async def get_nodes_loading_progress():
+    """ノード登録の進捗状況を返す"""
+    from node_editor.node_def import get_loading_progress
+    return get_loading_progress()
+
+
 @app.get("/api/nodes/definitions")
 async def get_node_definitions():
     """登録されているノード定義の一覧を返す（reactflow対応のみ、order順でソート）"""
+    # 初回呼び出し時にノードを遅延初期化
+    node_search_paths = settings_manager.get("node_search_paths", [])
+    node_def.initialize_nodes_lazy(node_search_paths)
+
+    # ノード登録の完了を非同期で待つ（イベントループをブロックしない）
+    await asyncio.to_thread(node_def.wait_for_nodes_ready)
+
     # reactflow対応ノードのみ取得
     node_definitions = get_all_nodes_for_gui("reactflow")
 
@@ -887,6 +888,11 @@ async def get_categories():
 async def execute_graph(graph_data: Dict[str, Any]):
     """グラフを1回実行する"""
     try:
+        # ノードが未登録の場合に備えて遅延初期化を呼ぶ（既に初期化済みなら即座にreturn）
+        node_search_paths = settings_manager.get("node_search_paths", [])
+        node_def.initialize_nodes_lazy(node_search_paths)
+        await asyncio.to_thread(node_def.wait_for_nodes_ready)
+
         graph = Graph(**graph_data)
         results, elapsed_ms, node_times, node_errors, connected_props, gui_overhead_ms = graph.execute()
         return {
@@ -929,6 +935,11 @@ async def websocket_stream(websocket: WebSocket):
                 msg_type = message.get("type")
 
                 if msg_type == "set_graph":
+                    # ノードが未登録の場合に備えて遅延初期化を呼ぶ
+                    node_search_paths = settings_manager.get("node_search_paths", [])
+                    node_def.initialize_nodes_lazy(node_search_paths)
+                    await asyncio.to_thread(node_def.wait_for_nodes_ready)
+
                     graph_data = message.get("graph")
                     state.graph = Graph(**graph_data)
 
@@ -984,6 +995,11 @@ async def websocket_stream(websocket: WebSocket):
                     graph_data = message.get("graph")
                     if graph_data:
                         try:
+                            # ノードが未登録の場合に備えて遅延初期化を呼ぶ
+                            node_search_paths = settings_manager.get("node_search_paths", [])
+                            node_def.initialize_nodes_lazy(node_search_paths)
+                            await asyncio.to_thread(node_def.wait_for_nodes_ready)
+
                             graph = Graph(**graph_data)
                             # プレビューモードフラグを渡す
                             preview_context = {"preview": True}
