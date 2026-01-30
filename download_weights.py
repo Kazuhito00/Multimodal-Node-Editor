@@ -144,7 +144,7 @@ def download_file_with_progress(
         total_size = int(response.headers.get('Content-Length', 0))
 
         # チャンクサイズ
-        chunk_size = 8192
+        chunk_size = 1024 * 256
         downloaded = 0
 
         with open(dest_path, 'wb') as f:
