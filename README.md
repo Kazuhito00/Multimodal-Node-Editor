@@ -51,6 +51,7 @@ fastapi             0.128.0   or later
 python-multipart    0.0.21    or later
 uvicorn[standard]   0.40.0    or later
 opencv-python       4.11.0.86 or later
+pillow              12.1.0    or later
 motpy               0.0.10    or later
 sahi                0.11.36   or later
 onnx                1.20.0    or later
