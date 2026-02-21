@@ -1,4 +1,5 @@
 import json
+import shutil
 from pathlib import Path
 from typing import Any, Dict, Optional
 
@@ -26,15 +27,50 @@ class SettingsManager:
             with open(self.config_file, "r", encoding="utf-8") as f:
                 self.settings = json.load(f)
         else:
-            # Default settings
-            self.settings = {
-                "config_version": "0.0.1",
-                "ui": {
-                    "theme": "dark"
-                },
-                "node_search_paths": []
-            }
-            self.save_settings()
+            # config.example.json が同じディレクトリにあればコピーして使用する
+            example_file = self.config_file.parent / "config.example.json"
+            if example_file.exists():
+                self.config_dir.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(example_file, self.config_file)
+                print(f"Created {self.config_file} from {example_file}")
+                with open(self.config_file, "r", encoding="utf-8") as f:
+                    self.settings = json.load(f)
+            else:
+                # Default settings
+                self.settings = {
+                    "config_version": "1.0.0",
+                    "ui": {
+                        "theme": "light",
+                        "sidebar": {
+                            "show_edit": False,
+                            "show_file": True,
+                            "show_auto_layout": True
+                        }
+                    },
+                    "node_search_paths": [
+                        "src/nodes"
+                    ],
+                    "audio": {
+                        "sample_rate": 16000
+                    },
+                    "camera": {
+                        "max_scan_count": 2
+                    },
+                    "graph": {
+                        "interval_ms": 50
+                    },
+                    "auto_download": {
+                        "video": False,
+                        "wav": False,
+                        "capture": False,
+                        "text": False
+                    },
+                    "api_keys": {
+                        "openai": "",
+                        "google_stt": ""
+                    }
+                }
+                self.save_settings()
 
     def save_settings(self):
         """Saves the current settings to the config file."""
