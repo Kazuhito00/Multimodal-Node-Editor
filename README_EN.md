@@ -19,7 +19,7 @@ Process images, audio, text, and more by connecting nodes - designed for experim
 Nodes are added as the author (Takahashi) needs them,<br>
 so some basic processing nodes for image, audio, and text may be missing.
 
-# Requirement
+# Requirements
 <details>
 <summary>Frontend</summary>
 
