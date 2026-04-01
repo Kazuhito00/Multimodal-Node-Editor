@@ -334,6 +334,11 @@ function CustomNode({ id, data, selected }: { id: string; data: NodeData; select
   const triggerInputPorts = nodeData.inputs.filter((p) => p.data_type === 'trigger');
   const triggerOutputPorts = nodeData.outputs.filter((p) => p.data_type === 'trigger');
 
+  // 未知型ポートを収集（既知の6型以外）
+  const knownTypes = new Set(['image', 'audio', 'int', 'float', 'string', 'trigger']);
+  const unknownInputPorts = nodeData.inputs.filter((p) => !knownTypes.has(p.data_type));
+  const unknownOutputPorts = nodeData.outputs.filter((p) => !knownTypes.has(p.data_type));
+
   // テキスト表示ノードかどうか判定
   // （string入力があり、text_area/text_inputウィジェットがなく、画像ポートもなく、string出力もなく、ボタンもない）
   const hasTextWidgets = nodeData.propertyDefs?.some(
@@ -947,6 +952,32 @@ function CustomNode({ id, data, selected }: { id: string; data: NodeData; select
               </div>
             );
           })}
+
+        {/* 未知型入力ポート */}
+        {unknownInputPorts.map((port) => (
+          <div key={port.id} className="unknown-port-row">
+            <Handle
+              type="target"
+              position={Position.Left}
+              id={port.id}
+              className="unknown-handle left"
+            />
+            <span className="port-label">{port.display_name || port.name}</span>
+          </div>
+        ))}
+
+        {/* 未知型出力ポート */}
+        {unknownOutputPorts.map((port) => (
+          <div key={port.id} className="unknown-port-row output">
+            <span className="port-label">{port.display_name || port.name}</span>
+            <Handle
+              type="source"
+              position={Position.Right}
+              id={port.id}
+              className="unknown-handle right"
+            />
+          </div>
+        ))}
 
         {/* 文字列入出力ポート (string inout) - 両端にハンドル */}
         {stringInoutPorts.map((inputPort) => {

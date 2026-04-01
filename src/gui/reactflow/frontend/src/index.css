@@ -772,6 +772,45 @@ html, body, #root {
   background: #22d3d8 !important;
 }
 
+/* 未知型ポート行 */
+.unknown-port-row {
+  display: flex;
+  align-items: center;
+  padding: 2px 10px;
+  position: relative;
+}
+
+.unknown-port-row.output {
+  justify-content: flex-end;
+}
+
+.unknown-port-row .port-label {
+  width: auto;
+  height: auto;
+  font-size: 10px;
+  color: #999;
+}
+
+.light .unknown-port-row .port-label {
+  color: #666;
+}
+
+/* 未知型ハンドル（グレー） */
+.unknown-handle {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  background: #888 !important;
+}
+
+.unknown-handle.left {
+  left: -5px !important;
+}
+
+.unknown-handle.right {
+  right: -5px !important;
+}
+
 /* 文字列ポート行（string） */
 .string-port-row {
   display: flex;
