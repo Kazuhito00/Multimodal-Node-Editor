@@ -15,6 +15,9 @@ except ImportError:
 class RTSPLogic(ComputeLogic):
     """RTSPストリームからフレームを取得するノードロジック（別スレッドで常時取得）"""
 
+    RETRY_INTERVAL = 3.0  # リトライまでの待機秒数
+    MAX_CONSECUTIVE_FAILURES = 5  # 再接続を試みるまでの連続失敗回数
+
     def __init__(self):
         self._current_url: str = ""
         self._video_capture: Optional[Any] = None
@@ -23,6 +26,21 @@ class RTSPLogic(ComputeLogic):
         self._running = False
         self._thread: Optional[threading.Thread] = None
         self._error: Optional[str] = None
+        self._consecutive_failures: int = 0
+
+    def _reconnect(self) -> bool:
+        """RTSP接続を再確立する"""
+        url = self._current_url
+        if self._video_capture is not None:
+            self._video_capture.release()
+            self._video_capture = None
+
+        self._video_capture = cv2.VideoCapture(url)
+        if not self._video_capture.isOpened():
+            self._video_capture.release()
+            self._video_capture = None
+            return False
+        return True
 
     def _capture_loop(self):
         """別スレッドで常にフレームを取得し続ける"""
@@ -36,10 +54,28 @@ class RTSPLogic(ComputeLogic):
                 with self._frame_lock:
                     self._latest_frame = frame
                     self._error = None
+                self._consecutive_failures = 0
             else:
+                self._consecutive_failures += 1
                 with self._frame_lock:
                     self._error = "Failed to read frame"
-                time.sleep(0.1)
+
+                if self._consecutive_failures >= self.MAX_CONSECUTIVE_FAILURES:
+                    with self._frame_lock:
+                        self._error = (
+                            "Failed to read frame (retrying...)"
+                        )
+                    # 数秒待ってから再接続を試みる
+                    for _ in range(int(self.RETRY_INTERVAL * 10)):
+                        if not self._running:
+                            return
+                        time.sleep(0.1)
+                    if self._reconnect():
+                        self._consecutive_failures = 0
+                        with self._frame_lock:
+                            self._error = None
+                else:
+                    time.sleep(0.1)
 
     def _start_capture(self, url: str) -> bool:
         """キャプチャスレッドを開始"""
