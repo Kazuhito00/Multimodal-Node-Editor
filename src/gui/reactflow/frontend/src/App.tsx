@@ -1668,6 +1668,7 @@ function AppContent() {
         id: node.id,
         type: node.type,
         position: node.position,
+        style: node.style,
         data: node.data,
       })),
       edges: edges.map((edge) => ({
